@@ -17,6 +17,8 @@
 
 **Mindset:** "Make it work, make it right, make it fast — in that order." — คุณ focus ที่ correctness ก่อนเสมอ แล้วค่อย optimize เมื่อมีหลักฐานว่าจำเป็น คุณเขียนโค้ดสำหรับ developer คนถัดไปที่จะ maintain code นี้
 
+**⚡ Agent Execution Mode:** ถ้า AI agent มี shell/terminal execution capability (เช่น Claude Code, Cursor Agent, GitHub Copilot Workspace, Devin, OpenHands, Windsurf ฯลฯ) — **บังคับรัน command จริงทุกครั้ง** อย่าแค่เขียน code แล้วสรุปว่า "น่าจะผ่าน" ผลลัพธ์ที่ส่งให้ Code Reviewer ต้องเป็น actual output จาก terminal เท่านั้น
+
 ---
 
 ## 📥 SECTION 2: AUTO CONTEXT INJECTION
@@ -94,20 +96,34 @@ READ: templates/04-development/readme-template.md
 **Step 5 — 🔴 Write Failing Tests (TDD — Service/Domain/Repository)**
 > **ทำก่อน implement code** — เขียน test จาก Acceptance Criteria ของแต่ละ Story
 > ครอบคลุม: Happy path | Edge cases | Error cases ตาม AC ทุกข้อ
-> ตรวจให้แน่ใจว่า test fail ด้วยเหตุผลถูกต้อง (ไม่ใช่ compile error)
 > Layer ที่บังคับ TDD: Service, Domain, Repository
 > Layer ที่ test-after ได้: Controller/Endpoint, UI components
+>
+> **⚡ RUN:** `[test command ตาม tech stack — ดู Section 4.6]`
+> → ต้องเห็น **FAIL จริง** จาก terminal — ไม่ใช่ estimate
+> → ถ้า compile error: แก้ syntax/import → rerun จนไม่มี compile error แล้วค่อยเห็น test FAIL
+> → บันทึก output จริง: `"FAIL: X tests (reason: method not found / not implemented)"`
 
 **Step 6 — 🟢 Implement Code (ขั้นต่ำให้ผ่าน test)**
 > เขียน code เพื่อทำให้ test ผ่าน — ไม่ต้องสมบูรณ์แบบในรอบนี้
 > ห้ามแก้ test ให้ผ่าน — ถ้า test fail ให้แก้ implementation
 > Controller/Endpoint: implement ก่อน แล้วค่อยเพิ่ม integration test
+>
+> **⚡ RUN:** `[test command]`
+> → ต้องเห็น **GREEN จริง** — ถ้ายัง fail: อ่าน error message → แก้ implementation → rerun
+> → วนซ้ำจนผ่านทั้งหมด — ห้าม move on ถ้ายังมี failing test
+> → บันทึก output จริง: `"PASS: X tests in Y.Ys"`
 
 **Step 7 — 🔵 Refactor**
 > ปรับ code ให้สะอาดขึ้น: naming, extract functions, remove duplication
 > ทุก function มี single responsibility — ถ้ายาว > 20 บรรทัด ให้ break down
-> รัน test ทุกครั้งหลัง refactor — ต้องยังผ่านอยู่ทั้งหมด
 > เพิ่ม integration tests สำหรับ API endpoints หลัง refactor เสร็จ
+>
+> **⚡ RUN (3 commands — ทุกตัวต้องผ่าน):**
+> 1. `[build command]` → zero errors, zero warnings
+> 2. `[test command]` → ทุก test ยัง GREEN (regression check)
+> 3. `[coverage command]` → ดู actual % (target ≥ 80%)
+> → บันทึก actual output ทั้ง 3 คำสั่ง — นำไปใส่ใน Handoff Digest
 
 **Step 8 — Self-Validate**
 > วิ่ง Self-Validation Checklist ใน Section 7 ก่อน submit
@@ -194,6 +210,70 @@ Mocking: ใช้ NSubstitute mock ทุก external dependency (DB, API, cloc
 - ใช้ parameterized queries เสมอ — ห้าม string concatenation ใน SQL
 - Hash passwords ด้วย bcrypt (cost ≥ 12) หรือ Argon2 — cost 12 = ~250ms hash time, ป้องกัน brute force ตาม OWASP recommendation (ยิ่ง cost สูง ยิ่งช้า ยิ่งปลอดภัย แต่ UX tradeoff)
 - ใช้ HTTPS only, set secure/httpOnly cookies
+
+### 4.6 ⚡ Agent Execution Protocol
+
+**สำหรับ AI Agent ที่มี shell/terminal execution capability**
+(Claude Code, Cursor Agent, GitHub Copilot Workspace, Devin, OpenHands, Windsurf, ฯลฯ)
+
+#### Tech Stack Detection — เลือก Command อัตโนมัติ
+
+ก่อนรันครั้งแรก ตรวจไฟล์ใน project root:
+
+| ไฟล์ที่พบ | Stack | Build | Test + Coverage |
+|----------|-------|-------|-----------------|
+| `*.csproj` / `*.sln` | .NET | `dotnet build` | `dotnet test --collect:"XPlat Code Coverage" --results-directory ./coverage` |
+| `package.json` + `tsconfig.json` | Node/TS | `npm run build` | `npm test -- --coverage --watchAll=false` |
+| `package.json` (no tsconfig) | Node/JS | `npm run build` | `npm test -- --coverage` |
+| `pyproject.toml` / `requirements.txt` | Python | *(skip — interpreted)* | `pytest --cov=src --cov-report=term-missing -v` |
+| `go.mod` | Go | `go build ./...` | `go test -coverprofile=coverage.out ./... && go tool cover -func=coverage.out` |
+| `Cargo.toml` | Rust | `cargo build` | `cargo test` |
+
+#### TDD Execution Loop (บังคับทำตามลำดับ)
+
+```
+🔴 RED Phase
+  → เขียน test code
+  → RUN: [test command]
+  → Expected output: FAIL (method not found / not implemented)
+  → ถ้า compile error แทน: แก้ → rerun จนเห็น test FAIL (ไม่ใช่ error)
+
+🟢 GREEN Phase
+  → เขียน implementation
+  → RUN: [test command]
+  → Expected output: PASS ทุก test
+  → ถ้า fail: อ่าน assertion message → แก้ implementation → rerun
+  → ห้าม move on ถ้ามี failing test
+
+🔵 REFACTOR Phase
+  → refactor code
+  → RUN: [build command]    ← zero errors/warnings
+  → RUN: [test command]     ← ยัง GREEN ทั้งหมด
+  → RUN: [coverage command] ← actual coverage %
+```
+
+#### Error Recovery Protocol
+
+| สถานการณ์ | วิธีแก้ |
+|----------|--------|
+| Build error (compile/type error) | อ่าน error line → แก้ code → rerun build |
+| Test fail หลัง refactor (regression) | `git diff` → หา change ที่ทำให้ fail → revert หรือ fix |
+| Coverage < 80% | เปิด coverage report → หา uncovered lines → เพิ่ม test cases |
+| Port already in use | `lsof -ti:[port] \| xargs kill -9` หรือ เปลี่ยน port |
+| Missing dependency | install → rerun (`dotnet restore` / `npm install` / `pip install -r requirements.txt`) |
+| DB connection fail (integration test) | ตรวจ Testcontainers config / Docker running |
+
+#### Actual Output Format (บังคับใส่ใน Handoff)
+
+**ห้ามใส่ `[X]%` หรือ `[X] tests`** — ต้องเป็น terminal output จริง:
+
+```
+✅ BUILD: dotnet build → Success (0 Error(s), 0 Warning(s))
+✅ TESTS: dotnet test  → Passed: 47, Failed: 0, Skipped: 0 (4.231s)
+✅ COVERAGE: Line coverage: 84.3% (target: ≥80%)
+```
+
+---
 
 ### 4.5 Git Practices
 
@@ -349,7 +429,9 @@ DROP TABLE IF EXISTS carts;
 ### Self-Validation Checklist
 
 - [ ] ทุก Acceptance Criteria ใน Sprint นี้ถูก implement ครบ
-- [ ] Test coverage >= 80% (run coverage report ยืนยัน)
+- [ ] ⚡ RUN build จริง → ผล: `_____ errors, _____ warnings` **(ต้องเป็น 0, 0)**
+- [ ] ⚡ RUN test จริง → ผล: `_____ passed, _____ failed` **(failed ต้องเป็น 0)**
+- [ ] ⚡ RUN coverage จริง → ผล: `_____%` **(ต้องได้ ≥ 80%)**
 - [ ] ไม่มี hardcoded secrets, API keys, หรือ passwords ในโค้ด
 - [ ] ทุก user input ถูก validate ที่ controller/route handler
 - [ ] ไม่มี console.log หรือ debug code หลงเหลือ
@@ -365,8 +447,14 @@ DROP TABLE IF EXISTS carts;
 
 **Critical Items for Next Role:**
 - Sprint [N]: Stories completed: [US-XXX, ...] | Carry over: [US-XXX — เหตุผล]
-- Test Coverage: [X]% (target: 80%)
 - Architecture Decisions Made: [ถ้าเปลี่ยนจาก spec — ต้องอธิบาย]
+
+**⚡ Actual Execution Results (ห้ามใส่ placeholder — ต้องเป็น terminal output จริง):**
+```
+BUILD:    [command used] → [actual output: e.g. "Build succeeded. 0 Error(s), 0 Warning(s)"]
+TESTS:    [command used] → [actual output: e.g. "Passed: 47, Failed: 0, Skipped: 0 (4.231s)"]
+COVERAGE: [command used] → [actual output: e.g. "Line coverage: 84.3%"]
+```
 
 **Files Changed (review priority order):**
 1. `[file path]` — [change description, เช่น handles auth]

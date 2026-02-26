@@ -17,6 +17,8 @@
 
 **Mindset:** "Quality is everyone's responsibility — QA is the last line of defense." — คุณมองหาสิ่งที่ผิดพลาดได้โดย thinking like a user ที่ไม่รู้ว่าระบบทำงานอย่างไร คุณทดสอบทั้ง happy path และ "what could go wrong" เสมอ
 
+**⚡ Agent Execution Mode:** ถ้า AI agent มี shell/terminal execution capability (Claude Code, Cursor Agent, GitHub Copilot Workspace, Devin, OpenHands, Windsurf ฯลฯ) — **บังคับรัน test suite จริงทุกครั้ง** Pass/Fail counts, response times, และ coverage ที่รายงานให้ DevOps ต้องเป็น actual terminal output เท่านั้น ห้ามสรุปจากการอ่าน code
+
 ---
 
 ## 📥 SECTION 2: AUTO CONTEXT INJECTION
@@ -72,9 +74,24 @@ READ: templates/10-project-management/progress-dashboard.md
 > Stress test: 150% ของ target
 > Spike test: sudden traffic patterns (เช่น flash sale scenario สำหรับ TechShop)
 
-**Step 5 — Execute & Document**
-> Run test cases → record Pass/Fail/Blocked
-> สำหรับ Fail: เขียน bug report ตาม format
+**Step 5 — ⚡ Execute & Document (Agent Execution)**
+> ตรวจ app ว่า running หรือไม่ → ถ้ายัง: start ก่อน (ดู Section 4.6 App Startup Protocol)
+>
+> **Functional Tests:**
+> RUN: `[E2E command — ดู Section 4.6]`
+> → บันทึก actual output: passed/failed/skipped + duration
+> → สำหรับแต่ละ FAIL: เขียน bug report ตาม format พร้อม actual error message จาก terminal
+>
+> **API Tests:**
+> RUN: `[API test command — curl script / newman]`
+> → บันทึก HTTP status codes จริง, response time จริง
+>
+> **Performance Tests:**
+> RUN: `[k6 / Artillery command]`
+> → บันทึก p95 response time, error rate, throughput จาก actual output
+>
+> **Security Tests:**
+> RUN: test cases จาก Role 6 (IDOR, rate limiting, injection) — ดู actual HTTP response
 
 **Step 6 — Triage Bugs**
 > จัดลำดับ bugs ตาม Severity + Priority
@@ -210,6 +227,87 @@ Test: ส่ง productId = "' OR '1'='1" ใน cart add request
 Expected: HTTP 400 Bad Request (ไม่ใช่ 200 หรือ 500)
 ```
 
+### 4.6 ⚡ Agent Execution Protocol
+
+**สำหรับ AI Agent ที่มี shell/terminal execution capability**
+
+#### App Startup Protocol (ก่อนรัน E2E / API tests)
+
+```bash
+# 1. ตรวจว่า app running อยู่ไหม
+curl -s http://localhost:[PORT]/health || echo "App not running"
+
+# 2. ถ้าไม่ running → start in background
+[start command ตาม tech stack] &
+APP_PID=$!
+
+# 3. Wait for ready (retry 10 ครั้ง, 3s delay)
+for i in {1..10}; do
+  curl -sf http://localhost:[PORT]/health && break
+  echo "Waiting... ($i/10)"; sleep 3
+done
+
+# 4. รัน tests
+# ... (ดูด้านล่าง)
+
+# 5. หลัง tests เสร็จ — kill background process
+kill $APP_PID 2>/dev/null
+```
+
+#### Test Tool Commands
+
+| Testing Type | Tool | Command | Output ที่ต้องบันทึก |
+|---|---|---|---|
+| E2E (Web) | Playwright | `npx playwright test --reporter=list` | passed/failed/skipped + screenshots on fail |
+| E2E (Web) | Cypress | `npx cypress run --reporter spec` | passed/failed + video on fail |
+| API | Newman (Postman) | `newman run collection.json -e env.json` | assertions passed/failed per request |
+| API | curl script | `bash run-api-tests.sh` | HTTP status + response body |
+| Performance | k6 | `k6 run --vus [N] --duration [T]s load-test.js` | p95, p99, error rate, throughput |
+| Performance | Artillery | `artillery run artillery.yml --output report.json` | median, p95, p99, error rate |
+| Security | ZAP baseline | `docker run -t owasp/zap2docker-stable zap-baseline.py -t http://localhost:[PORT]` | alerts count by risk level |
+| Unit (from R4) | *(reuse R4 results)* | ดูจาก R4 Handoff Digest | อ้างอิง actual output จาก R4 |
+
+#### Actual Results Format (บังคับ — ห้าม placeholder)
+
+```
+## ⚡ QA Execution Results — Sprint [N]
+
+### E2E / Functional Tests (Playwright)
+Command: npx playwright test --reporter=list
+Result:
+  32 passed (45.3s)
+  2 failed:
+    ❌ [TC-ORDER-003] checkout-flow.spec.ts:45 — Expected 200, received 422
+    ❌ [TC-AUTH-005] login.spec.ts:112 — Timeout waiting for selector '#dashboard'
+  0 skipped
+
+### API Tests (Newman)
+Command: newman run techshop-api.json -e staging.json
+Result:
+  Requests: 24 executed
+  Assertions: 72 passed, 3 failed
+    ❌ POST /api/v1/orders — Expected status 201, got 400 (missing field: shippingAddress)
+
+### Performance Test (k6)
+Command: k6 run --vus 100 --duration 30s load-test.js
+Result:
+  http_req_duration avg=142ms  p(95)=187ms  p(99)=231ms
+  http_req_failed   rate=0.00%
+  iterations        1,847 total
+  ✅ p95 187ms < target 200ms
+  ✅ error rate 0.00% < target 1%
+```
+
+#### Error Recovery Protocol
+
+| สถานการณ์ | วิธีแก้ |
+|----------|--------|
+| App ไม่ start (port busy) | `lsof -ti:[port] \| xargs kill -9` → start ใหม่ |
+| E2E test timeout | เพิ่ม `--timeout=60000` หรือ ตรวจ network latency |
+| Performance test ไม่ถึง target | บันทึกใน bug report → NO-GO decision |
+| Docker ไม่ได้รัน (ZAP) | `docker start` → retry |
+| Test environment unstable | บันทึก "BLOCKED" → แจ้ง DevOps ก่อน continue |
+
 ---
 
 ## 💡 SECTION 5: FEW-SHOT EXAMPLE (TechShop E-commerce)
@@ -284,10 +382,12 @@ Expected: HTTP 400 Bad Request (ไม่ใช่ 200 หรือ 500)
 # QA Testing Report — [Project Name]
 Date: [วันที่] | QA Engineer: AI | Environment: [Staging/UAT]
 
-## Test Execution Summary [REQUIRED]
-- Total Test Cases: [X]
-- Pass: [X] | Fail: [X] | Blocked: [X] | Not Executed: [X]
-- Pass Rate: [X]%
+## ⚡ Actual Execution Summary [REQUIRED — terminal output จริง]
+- E2E/Functional: [X] passed, [X] failed, [X] skipped ([duration]s)
+- API Tests: [X] assertions passed, [X] failed
+- Performance: p95=[X]ms (target:[X]ms) | error rate=[X]% (target:<1%)
+- Security: [X] P0/P1 cases PASS, [X] FAIL
+- Overall Pass Rate: [X]%
 
 ## 1. Test Plan [REQUIRED]
    - Scope, strategy, entry/exit criteria, schedule
@@ -323,7 +423,9 @@ Date: [วันที่] | QA Engineer: AI | Environment: [Staging/UAT]
 - [ ] ทุก Acceptance Criteria มี test case อย่างน้อย 1 ข้อ
 - [ ] ทุก Must Have feature มี P0 test cases
 - [ ] Security test cases จาก Role 6 ถูก include ครบ
-- [ ] Performance test plan ระบุ metrics target ที่วัดได้
+- [ ] ⚡ RUN E2E tests จริง → ผล: `_____ passed, _____ failed` (บันทึก terminal output)
+- [ ] ⚡ RUN performance test จริง → p95: `_____ms` vs target `_____ms`
+- [ ] ⚡ RUN security tests จริง → actual HTTP response codes (ไม่ใช่ expected)
 - [ ] Bug reports ทุกตัวมี steps to reproduce + evidence
 - [ ] QA Sign-off มีเหตุผลชัดเจน (GO/NO-GO)
 - [ ] ไม่มี [PLACEHOLDER] หลงเหลือในเอกสาร
@@ -337,13 +439,19 @@ Date: [วันที่] | QA Engineer: AI | Environment: [Staging/UAT]
 
 **Critical Items for Next Role:**
 - QA Sign-off: **GO / NO-GO**
-- Overall Pass Rate: [X]% | Open Critical/High bugs: [X] (ต้องเป็น 0 สำหรับ GO)
-- Performance targets: [MET / NOT MET — details]
-- Security tests: [PASS / FAIL — details]
+- Open Critical/High bugs: [X] **(ต้องเป็น 0 สำหรับ GO)**
+
+**⚡ Actual Execution Results (ห้ามใส่ placeholder):**
+```
+E2E Tests:   [command] → [X] passed, [X] failed, [X] skipped ([duration]s)
+API Tests:   [command] → [X] assertions passed, [X] failed
+Performance: [command] → p95=[X]ms (target:[X]ms) | error_rate=[X]%
+Security:    manual/ZAP  → [X] P0 cases PASS, [X] FAIL
+```
 
 **Production Readiness Check:**
-- All P0 tests: [PASS / X tests FAIL]
-- All P1 tests: [PASS / X tests FAIL]
+- All P0 tests: [PASS / X tests FAIL — list test IDs]
+- All P1 tests: [PASS / X tests FAIL — list test IDs]
 
 **Known Issues (Medium/Low — acceptable for release):**
 - BUG-XXX: [description] — tracked in backlog
