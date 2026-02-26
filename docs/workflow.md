@@ -186,7 +186,7 @@
 
 ## Progress Dashboard (Single Source of Truth)
 
-ไฟล์ `templates/project-management/progress-dashboard.md` ทำหน้าที่เป็น **shared state** ระหว่างทุก Role
+ไฟล์ `templates/10-project-management/progress-dashboard.md` ทำหน้าที่เป็น **shared state** ระหว่างทุก Role
 
 - ในโหมด **Auto-Pipeline**: AI จะสร้างและอัปเดตอัตโนมัติหลังจาก Role เสร็จงาน, Sprint เสร็จ, Checkpoint ผ่าน
 - ในโหมด **Manual**: ผู้ใช้ควรอัปเดตเองหลังจากแต่ละ Role ทำงานเสร็จ

@@ -24,15 +24,15 @@ Template กลางสำหรับจำลองทีมพัฒนา�
 50+ template พร้อมใช้งาน ครอบคลุมทุกขั้นตอนของการพัฒนาซอฟต์แวร์:
 
 - **วิเคราะห์ความต้องการ**: เอกสารความต้องการ, User Story Map, Priority Matrix, วิเคราะห์ความเสี่ยง
-- **สถาปัตยกรรม**: Architecture Diagram, Tech Stack, API Spec, DB Schema, Data Flow
+- **สถาปัตยกรรม**: Architecture Diagram, Tech Stack, API Spec, DB Schema, Data Flow, ADR Log
 - **ออกแบบ UX/UI**: User Personas, Journey Map, Wireframes, Design System, Usability Testing
-- **พัฒนา**: README Template, มาตรฐานการทดสอบ, PR Template
+- **พัฒนา**: README Template, Code Structure Guide, มาตรฐานการทดสอบ, PR Template
 - **ตรวจสอบโค้ด**: รายงาน Code Review, Checklist การตรวจสอบ
 - **ความปลอดภัย**: Threat Model (STRIDE), ประเมิน OWASP, รายงานความปลอดภัย, แผนแก้ไข, นโยบาย
 - **ทดสอบคุณภาพ**: Test Plan, Test Cases, Bug Report, Performance Test, QA Sign-off
 - **DevOps**: CI/CD Pipeline, Docker Config, Monitoring, Runbooks, Environments, Infrastructure
-- **เอกสาร**: คู่มือผู้ใช้, เอกสาร API, Onboarding, Troubleshooting, Release Notes, ADR
-- **บริหารโครงการ**: Roadmap, Sprint Plan, Status Report, Risk Register, Meeting Templates, **Progress Dashboard**
+- **เอกสาร**: คู่มือผู้ใช้, เอกสาร API, Onboarding, Troubleshooting, Release Notes
+- **บริหารโครงการ**: Roadmap, Sprint Plan, Sprint Retrospective, Status Report, **Progress Dashboard**
 
 ## เริ่มต้นใช้งาน
 
@@ -104,20 +104,24 @@ Phase 4: Project Summary → ส่งมอบทั้งหมด (พร้�
 │   ├── 09-documentation/        #   นักเขียนเอกสาร
 │   └── 10-project-management/   #   Product Owner / PM
 ├── templates/                   # Template เอกสารส่งมอบ 50+ ไฟล์
-│   ├── requirements/            #   เอกสารความต้องการ (4 ไฟล์)
-│   ├── architecture/            #   เอกสารสถาปัตยกรรม (5 ไฟล์)
-│   ├── ux-ui/                   #   เอกสารออกแบบ UI (5 ไฟล์)
-│   ├── development/             #   เอกสารพัฒนา (3 ไฟล์)
-│   ├── code-review/             #   เอกสารตรวจสอบโค้ด (2 ไฟล์)
-│   ├── security/                #   เอกสารความปลอดภัย (5 ไฟล์)
-│   ├── qa-testing/              #   เอกสารทดสอบ (5 ไฟล์)
-│   ├── devops/                  #   เอกสาร DevOps (6 ไฟล์)
-│   ├── documentation/           #   เอกสารสำหรับผู้ใช้ (6 ไฟล์)
-│   └── project-management/      #   เอกสารบริหารโครงการ (6 ไฟล์)
+│   ├── 01-requirements/         #   เอกสารความต้องการ (4 ไฟล์)
+│   ├── 02-architecture/         #   เอกสารสถาปัตยกรรม (6 ไฟล์)
+│   ├── 03-ux-ui/                #   เอกสารออกแบบ UI (5 ไฟล์)
+│   ├── 04-development/          #   เอกสารพัฒนา (4 ไฟล์)
+│   ├── 05-code-review/          #   เอกสารตรวจสอบโค้ด (2 ไฟล์)
+│   ├── 06-security/             #   เอกสารความปลอดภัย (5 ไฟล์)
+│   ├── 07-qa-testing/           #   เอกสารทดสอบ (5 ไฟล์)
+│   ├── 08-devops/               #   เอกสาร DevOps (6 ไฟล์)
+│   ├── 09-documentation/        #   เอกสารสำหรับผู้ใช้ (5 ไฟล์)
+│   └── 10-project-management/   #   เอกสารบริหารโครงการ (5 ไฟล์)
+├── standards/                   # มาตรฐานระดับบริษัท
+│   ├── coding-standards.md      #   Naming, TDD, Git, Security baseline
+│   └── tech-stack-catalog.md    #   Approved tech stack catalog
 ├── docs/
 │   ├── workflow.md              # ผังกระบวนการ SDLC
 │   ├── how-to-use-en.md         # คู่มือการใช้งาน (อังกฤษ)
-│   └── how-to-use-th.md         # คู่มือการใช้งาน (ไทย)
+│   ├── how-to-use-th.md         # คู่มือการใช้งาน (ไทย)
+│   └── improvement-recommendations.md  # Change log & recommendations
 ├── README.md                    # ภาพรวมโครงการ (อังกฤษ)
 └── README-th.md                 # ภาพรวมโครงการ (ไทย) — ไฟล์นี้
 ```

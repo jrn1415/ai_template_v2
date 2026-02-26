@@ -91,16 +91,16 @@ Requirement Analyst → System Architect → UX/UI Designer → Developer
 | # | Role | Prompt File | Template Dir |
 |---|------|-------------|--------------|
 | - | **Auto-Pipeline** | `.ai-prompts/auto-pipeline-prompt.md` | All templates |
-| 1 | Requirement Analyst | `.ai-prompts/01-requirements/prompt.md` | `templates/requirements/` |
-| 2 | System Architect | `.ai-prompts/02-architecture/prompt.md` | `templates/architecture/` |
-| 3 | UX/UI Designer | `.ai-prompts/03-ux-ui/prompt.md` | `templates/ux-ui/` |
-| 4 | Software Developer | `.ai-prompts/04-development/prompt.md` | `templates/development/` |
-| 5 | Code Reviewer | `.ai-prompts/05-code-review/prompt.md` | `templates/code-review/` |
-| 6 | Security Engineer | `.ai-prompts/06-security/prompt.md` | `templates/security/` |
-| 7 | QA/Tester | `.ai-prompts/07-qa-testing/prompt.md` | `templates/qa-testing/` |
-| 8 | DevOps/CICD Engineer | `.ai-prompts/08-devops/prompt.md` | `templates/devops/` |
-| 9 | Technical Writer | `.ai-prompts/09-documentation/prompt.md` | `templates/documentation/` |
-| 10 | Product Owner/PM | `.ai-prompts/10-project-management/prompt.md` | `templates/project-management/` |
+| 1 | Requirement Analyst | `.ai-prompts/01-requirements/prompt.md` | `templates/01-requirements/` |
+| 2 | System Architect | `.ai-prompts/02-architecture/prompt.md` | `templates/02-architecture/` |
+| 3 | UX/UI Designer | `.ai-prompts/03-ux-ui/prompt.md` | `templates/03-ux-ui/` |
+| 4 | Software Developer | `.ai-prompts/04-development/prompt.md` | `templates/04-development/` |
+| 5 | Code Reviewer | `.ai-prompts/05-code-review/prompt.md` | `templates/05-code-review/` |
+| 6 | Security Engineer | `.ai-prompts/06-security/prompt.md` | `templates/06-security/` |
+| 7 | QA/Tester | `.ai-prompts/07-qa-testing/prompt.md` | `templates/07-qa-testing/` |
+| 8 | DevOps/CICD Engineer | `.ai-prompts/08-devops/prompt.md` | `templates/08-devops/` |
+| 9 | Technical Writer | `.ai-prompts/09-documentation/prompt.md` | `templates/09-documentation/` |
+| 10 | Product Owner/PM | `.ai-prompts/10-project-management/prompt.md` | `templates/10-project-management/` |
 
 ## Input Files
 
@@ -110,7 +110,7 @@ Requirement Analyst → System Architect → UX/UI Designer → Developer
 
 ## Progress Tracking
 
-ในโหมด Auto-Pipeline ไฟล์ `templates/project-management/progress-dashboard.md` จะถูกสร้างและอัปเดตอัตโนมัติตลอดกระบวนการ เป็น **Single Source of Truth** ให้ทุก Role เห็นความคืบหน้าเดียวกัน
+ในโหมด Auto-Pipeline ไฟล์ `templates/10-project-management/progress-dashboard.md` จะถูกสร้างและอัปเดตอัตโนมัติตลอดกระบวนการ เป็น **Single Source of Truth** ให้ทุก Role เห็นความคืบหน้าเดียวกัน
 
 | อัปเดตเมื่อ | สิ่งที่อัปเดต |
 |------------|-------------|
@@ -139,15 +139,19 @@ Every feature/sprint must satisfy ALL of the following before release:
 - [ ] Deployed to Production successfully
 - [ ] Monitoring & Alerting operational
 
-## Coding Standards
+## Company Standards
 
-- Follow Clean Code Principles: SOLID, DRY, KISS
-- Git branching: Git Flow or Trunk-based (define per project)
-- Commit messages: Conventional Commits format
-- PR process: All changes require review before merge
-- Test coverage minimum: 80%
+ไฟล์ standards ของบริษัทอยู่ใน `standards/` — ใช้เป็น baseline สำหรับทุกโปรเจกต์
+
+| File | เนื้อหา | อ่านโดย |
+|------|--------|--------|
+| `standards/coding-standards.md` | Naming, Git, Testing, Security, Language-specific rules | Developer (Role 4), Code Reviewer (Role 5) |
+| `standards/tech-stack-catalog.md` | Approved / Conditional / Not Approved tech stack options | System Architect (Role 2) |
+
+> **หมายเหตุ:** standards เหล่านี้คือ company-wide baseline
+> Project-specific overrides ให้บันทึกใน `templates/02-architecture/tech-stack.md` พร้อมเหตุผล
+> ถ้าต้องการใช้ technology ที่ไม่อยู่ใน Approved list → สร้าง ADR ใน `templates/02-architecture/adr-log.md`
 
 ## Tech Stack Convention
 
-Define your tech stack in `templates/architecture/tech-stack.md` after the Architecture phase.
-All team members must reference this document for consistency.
+เลือก tech stack จาก `standards/tech-stack-catalog.md` ก่อน แล้วบันทึกการเลือกสุดท้ายใน `templates/02-architecture/tech-stack.md`

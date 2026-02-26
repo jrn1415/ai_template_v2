@@ -1,0 +1,1386 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Code Template — SDLC Workflow | Easy Buy PCL</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --neon-blue: #00f3ff;
+            --neon-pink: #ff00ff;
+            --neon-purple: #b026ff;
+            --neon-green: #00ff88;
+            --neon-yellow: #ffff00;
+            --neon-orange: #ff8c00;
+            --dark-bg: #0a0a0f;
+            --glass-bg: rgba(255,255,255,0.03);
+        }
+        body { font-family: 'Noto Sans Thai', sans-serif; background: var(--dark-bg); color: #fff; overflow: hidden; position: relative; }
+
+        /* Background */
+        .bg-animation {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background:
+                radial-gradient(ellipse at 20% 80%, rgba(176,38,255,0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(0,243,255,0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(255,0,255,0.05) 0%, transparent 70%);
+        }
+        .grid-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background-image: linear-gradient(rgba(0,243,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,243,255,0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+        }
+        @keyframes gridMove {
+            0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
+            100% { transform: perspective(500px) rotateX(60deg) translateY(50px); }
+        }
+        .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; }
+        .particle {
+            position: absolute; width: 2px; height: 2px; background: var(--neon-blue);
+            border-radius: 50%; animation: float 15s infinite; opacity: 0.6;
+        }
+        @keyframes float {
+            0%,100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.6; } 90% { opacity: 0.6; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* Progress Bar */
+        .progress-bar-container { position: fixed; top: 0; left: 0; width: 100%; height: 4px; z-index: 1000; background: rgba(255,255,255,0.1); }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple), var(--neon-pink)); transition: width 0.5s ease; box-shadow: 0 0 10px rgba(0,243,255,0.8); }
+
+        /* Slide Container */
+        .presentation-container { width: 100vw; height: 100vh; position: relative; }
+        .slide {
+            position: absolute; width: 100%; height: 100%;
+            display: none; padding: 30px 60px; opacity: 0;
+            transform: scale(0.9) translateY(50px);
+            transition: all 0.8s cubic-bezier(0.4,0,0.2,1);
+        }
+        .slide.active { display: flex; flex-direction: column; opacity: 1; transform: scale(1) translateY(0); }
+
+        /* Title Slide */
+        .title-slide { justify-content: center; align-items: center; text-align: center; }
+        .cyber-title {
+            font-family: 'Orbitron', sans-serif; font-size: 3.8rem; font-weight: 900;
+            text-transform: uppercase; letter-spacing: 6px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple), var(--neon-pink));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            animation: cyberGlow 3s ease-in-out infinite; position: relative;
+        }
+        @keyframes cyberGlow {
+            0%,100% { filter: drop-shadow(0 0 20px rgba(0,243,255,0.8)); }
+            50% { filter: drop-shadow(0 0 40px rgba(176,38,255,0.8)); }
+        }
+        .cyber-subtitle { font-family: 'Orbitron', sans-serif; font-size: 1.6rem; color: var(--neon-green); margin-top: 16px; letter-spacing: 3px; text-shadow: 0 0 10px rgba(0,255,136,0.5); }
+        .cyber-badge {
+            display: inline-block; padding: 10px 30px; margin-top: 24px;
+            border: 2px solid var(--neon-pink);
+            background: linear-gradient(135deg, rgba(255,0,255,0.1), rgba(176,38,255,0.1));
+            color: var(--neon-pink); font-family: 'Orbitron', sans-serif; font-size: 1.1rem;
+            letter-spacing: 3px; transform: skewX(-10deg);
+            animation: cyberPulse 2s ease-in-out infinite;
+        }
+        @keyframes cyberPulse {
+            0%,100% { box-shadow: 0 0 10px rgba(255,0,255,0.5); }
+            50% { box-shadow: 0 0 30px rgba(255,0,255,0.8); }
+        }
+        .title-meta { margin-top: 40px; display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; }
+        .title-meta-item { display: flex; align-items: center; gap: 8px; font-size: 1rem; color: rgba(255,255,255,0.7); }
+        .title-meta-item i { color: var(--neon-blue); font-size: 1.2rem; }
+
+        /* Slide Header */
+        .slide-header { display: flex; align-items: center; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 2px solid; border-image: linear-gradient(90deg, var(--neon-blue), var(--neon-purple)) 1; }
+        .slide-number {
+            font-family: 'Orbitron', sans-serif; width: 60px; height: 60px;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            border-radius: 14px; display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; font-weight: 700; color: #000; margin-right: 20px;
+            box-shadow: 0 0 30px rgba(0,243,255,0.5); transform: rotate(-5deg);
+            animation: numberFloat 3s ease-in-out infinite; flex-shrink: 0;
+        }
+        @keyframes numberFloat {
+            0%,100% { transform: rotate(-5deg) translateY(0); }
+            50% { transform: rotate(-5deg) translateY(-5px); }
+        }
+        .slide-title { font-family: 'Orbitron', sans-serif; font-size: 1.9rem; font-weight: 700; color: #fff; text-shadow: 0 0 20px rgba(255,255,255,0.3); }
+        .slide-subtitle { font-size: 1rem; color: rgba(255,255,255,0.6); margin-top: 4px; }
+        .slide-content { flex: 1; overflow-y: auto; padding-right: 10px; }
+        .slide-content::-webkit-scrollbar { width: 5px; }
+        .slide-content::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
+        .slide-content::-webkit-scrollbar-thumb { background: linear-gradient(var(--neon-blue), var(--neon-purple)); border-radius: 3px; }
+
+        /* Glass Card */
+        .glass-card {
+            background: var(--glass-bg); backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 24px;
+            transition: all 0.4s ease;
+        }
+        .glass-card:hover { border-color: rgba(0,243,255,0.5); box-shadow: 0 0 40px rgba(0,243,255,0.2); transform: translateY(-3px); }
+
+        /* Metrics Grid */
+        .metrics-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-top: 20px; }
+        .metric-card {
+            background: linear-gradient(135deg, rgba(0,243,255,0.1), rgba(176,38,255,0.1));
+            border: 1px solid rgba(0,243,255,0.3); border-radius: 16px; padding: 24px 16px;
+            text-align: center; position: relative; overflow: hidden; transition: all 0.4s ease;
+        }
+        .metric-card::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(0,243,255,0.1) 0%, transparent 60%);
+            animation: metricSpin 6s linear infinite;
+        }
+        @keyframes metricSpin { 0% { transform: rotate(0); } 100% { transform: rotate(360deg); } }
+        .metric-card:hover { border-color: var(--neon-blue); box-shadow: 0 0 30px rgba(0,243,255,0.4); transform: translateY(-5px); }
+        .metric-value { font-family: 'Orbitron', sans-serif; font-size: 2.2rem; font-weight: 800; color: var(--neon-blue); display: block; position: relative; z-index: 1; }
+        .metric-label { font-size: 0.85rem; color: rgba(255,255,255,0.7); margin-top: 6px; position: relative; z-index: 1; }
+        .metric-icon { font-size: 1.5rem; margin-bottom: 10px; position: relative; z-index: 1; }
+
+        /* Role Cards Grid */
+        .roles-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 12px; margin-top: 16px; }
+        .role-card {
+            border-radius: 12px; padding: 16px 12px; text-align: center;
+            border: 1px solid; transition: all 0.3s ease; cursor: default; position: relative; overflow: hidden;
+        }
+        .role-card:hover { transform: translateY(-4px); }
+        .role-card .role-num { font-family: 'Orbitron', sans-serif; font-size: 1.4rem; font-weight: 800; }
+        .role-card .role-icon { font-size: 1.6rem; margin: 6px 0; }
+        .role-card .role-name { font-size: 0.75rem; font-weight: 600; }
+        .role-card .role-phase { font-size: 0.65rem; margin-top: 4px; opacity: 0.7; }
+
+        /* Phase Cards */
+        .phase-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; margin-top: 16px; }
+        .phase-card {
+            border-radius: 16px; padding: 20px; border: 1px solid; transition: all 0.3s ease;
+        }
+        .phase-card:hover { transform: translateY(-3px); }
+        .phase-title { font-family: 'Orbitron', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+        .phase-roles { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+        .phase-role-badge { padding: 3px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 600; }
+        .phase-deliverables { font-size: 0.78rem; color: rgba(255,255,255,0.75); }
+        .phase-deliverables li { margin-top: 4px; padding-left: 12px; position: relative; }
+        .phase-deliverables li::before { content: '▸'; position: absolute; left: 0; }
+
+        /* Pipeline */
+        .pipeline-container { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin: 16px 0; justify-content: center; }
+        .pipeline-step {
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
+            padding: 12px 14px; border-radius: 12px; border: 1px solid;
+            font-size: 0.75rem; font-weight: 600; text-align: center; min-width: 90px;
+            transition: all 0.3s ease;
+        }
+        .pipeline-step:hover { transform: scale(1.05); }
+        .pipeline-step i { font-size: 1.2rem; }
+        .pipeline-arrow { color: var(--neon-blue); font-size: 1.1rem; flex-shrink: 0; }
+        .pipeline-checkpoint {
+            padding: 8px 14px; border: 2px solid var(--neon-yellow); border-radius: 20px;
+            color: var(--neon-yellow); font-size: 0.72rem; font-weight: 700; font-family: 'Orbitron', sans-serif;
+            text-align: center; animation: checkpointPulse 2s ease-in-out infinite;
+        }
+        @keyframes checkpointPulse {
+            0%,100% { box-shadow: 0 0 8px rgba(255,255,0,0.4); }
+            50% { box-shadow: 0 0 20px rgba(255,255,0,0.8); }
+        }
+
+        /* Two Column Layout */
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+
+        /* List Items */
+        .cyber-list { list-style: none; }
+        .cyber-list li { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 0.88rem; display: flex; align-items: flex-start; gap: 8px; }
+        .cyber-list li:last-child { border-bottom: none; }
+        .cyber-list li i { color: var(--neon-blue); margin-top: 2px; flex-shrink: 0; width: 14px; }
+
+        /* Tags */
+        .tag { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.7rem; font-weight: 600; margin: 2px; }
+        .tag-blue { background: rgba(0,243,255,0.15); border: 1px solid rgba(0,243,255,0.4); color: var(--neon-blue); }
+        .tag-pink { background: rgba(255,0,255,0.15); border: 1px solid rgba(255,0,255,0.4); color: var(--neon-pink); }
+        .tag-green { background: rgba(0,255,136,0.15); border: 1px solid rgba(0,255,136,0.4); color: var(--neon-green); }
+        .tag-yellow { background: rgba(255,255,0,0.15); border: 1px solid rgba(255,255,0,0.4); color: var(--neon-yellow); }
+        .tag-purple { background: rgba(176,38,255,0.15); border: 1px solid rgba(176,38,255,0.4); color: var(--neon-purple); }
+        .tag-orange { background: rgba(255,140,0,0.15); border: 1px solid rgba(255,140,0,0.4); color: var(--neon-orange); }
+
+        /* Section Title */
+        .section-title { font-family: 'Orbitron', sans-serif; font-size: 1rem; font-weight: 700; color: var(--neon-blue); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        .section-title::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, rgba(0,243,255,0.5), transparent); }
+
+        /* Highlight Box */
+        .highlight-box { border-left: 3px solid var(--neon-blue); padding: 10px 16px; background: rgba(0,243,255,0.05); border-radius: 0 10px 10px 0; margin: 10px 0; font-size: 0.85rem; }
+        .highlight-box.pink { border-left-color: var(--neon-pink); background: rgba(255,0,255,0.05); }
+        .highlight-box.green { border-left-color: var(--neon-green); background: rgba(0,255,136,0.05); }
+        .highlight-box.yellow { border-left-color: var(--neon-yellow); background: rgba(255,255,0,0.05); }
+        .highlight-box.purple { border-left-color: var(--neon-purple); background: rgba(176,38,255,0.05); }
+
+        /* Checklist */
+        .checklist { list-style: none; }
+        .checklist li { display: flex; align-items: center; gap: 10px; padding: 7px 0; font-size: 0.85rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .checklist li:last-child { border-bottom: none; }
+        .checklist li i { font-size: 1rem; flex-shrink: 0; }
+        .check-ok { color: var(--neon-green); }
+        .check-req { color: var(--neon-yellow); }
+
+        /* Table */
+        .cyber-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+        .cyber-table th { background: rgba(0,243,255,0.1); color: var(--neon-blue); font-family: 'Orbitron', sans-serif; font-size: 0.72rem; letter-spacing: 1px; padding: 10px 12px; text-align: left; border-bottom: 1px solid rgba(0,243,255,0.3); }
+        .cyber-table td { padding: 9px 12px; border-bottom: 1px solid rgba(255,255,255,0.05); color: rgba(255,255,255,0.85); vertical-align: top; }
+        .cyber-table tr:hover td { background: rgba(0,243,255,0.04); }
+
+        /* Navigation */
+        .nav-container { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 20px; z-index: 1000; }
+        .nav-btn {
+            width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--neon-blue);
+            background: rgba(0,243,255,0.1); color: var(--neon-blue); font-size: 1.2rem;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .nav-btn:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 20px rgba(0,243,255,0.6); }
+        .slide-counter { font-family: 'Orbitron', sans-serif; font-size: 0.9rem; color: rgba(255,255,255,0.7); text-align: center; min-width: 60px; }
+
+        /* Slide Dots */
+        .dots-container { position: fixed; right: 20px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 8px; z-index: 1000; }
+        .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.2); cursor: pointer; transition: all 0.3s ease; }
+        .dot.active { background: var(--neon-blue); box-shadow: 0 0 8px rgba(0,243,255,0.8); transform: scale(1.4); }
+
+        /* Footer */
+        .slide-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 0.72rem; color: rgba(255,255,255,0.4); margin-top: auto; }
+
+        /* Color helpers */
+        .c-blue { color: var(--neon-blue); }
+        .c-pink { color: var(--neon-pink); }
+        .c-green { color: var(--neon-green); }
+        .c-yellow { color: var(--neon-yellow); }
+        .c-purple { color: var(--neon-purple); }
+        .c-orange { color: var(--neon-orange); }
+        .fw-700 { font-weight: 700; }
+
+        /* Template folder grid */
+        .folder-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 10px; }
+        .folder-card {
+            border-radius: 12px; padding: 14px 10px; text-align: center; border: 1px solid;
+            transition: all 0.3s ease; font-size: 0.72rem;
+        }
+        .folder-card:hover { transform: translateY(-3px); }
+        .folder-icon { font-size: 1.4rem; margin-bottom: 6px; }
+        .folder-name { font-weight: 600; font-size: 0.75rem; margin-bottom: 4px; }
+        .folder-count { opacity: 0.7; }
+
+        /* Sprint timeline */
+        .sprint-timeline { display: flex; flex-direction: column; gap: 10px; }
+        .sprint-row { display: flex; align-items: center; gap: 12px; }
+        .sprint-badge { font-family: 'Orbitron', sans-serif; font-size: 0.7rem; padding: 4px 12px; border-radius: 20px; flex-shrink: 0; min-width: 80px; text-align: center; font-weight: 700; }
+        .sprint-bar { flex: 1; height: 28px; border-radius: 6px; display: flex; align-items: center; padding: 0 12px; font-size: 0.78rem; font-weight: 600; position: relative; overflow: hidden; }
+        .sprint-bar::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(255,255,255,0.05) 0%, transparent 100%); }
+
+        /* Glow text */
+        .glow-text { text-shadow: 0 0 10px currentColor; }
+    </style>
+</head>
+<body>
+
+<div class="bg-animation"></div>
+<div class="grid-overlay"></div>
+<div class="particles" id="particles"></div>
+
+<div class="progress-bar-container">
+    <div class="progress-bar" id="progressBar"></div>
+</div>
+
+<div class="presentation-container" id="presentationContainer">
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 1: TITLE -->
+    <!-- ============================================================ -->
+    <div class="slide title-slide active" data-slide="1">
+        <div>
+            <div class="cyber-title">AI Code Template</div>
+            <div class="cyber-subtitle">SDLC Workflow Guide</div>
+            <div class="cyber-badge">🦞 Easy Buy PCL — Training Edition</div>
+            <div class="title-meta">
+                <div class="title-meta-item"><i class="fas fa-users"></i> 10 AI Roles</div>
+                <div class="title-meta-item"><i class="fas fa-layer-group"></i> 4 Phases</div>
+                <div class="title-meta-item"><i class="fas fa-file-alt"></i> 47+ Templates</div>
+                <div class="title-meta-item"><i class="fas fa-robot"></i> Auto-Pipeline</div>
+                <div class="title-meta-item"><i class="fas fa-shield-alt"></i> Company Standards</div>
+            </div>
+            <div style="margin-top:30px; font-size:0.9rem; color:rgba(255,255,255,0.5);">
+                กด <span class="c-blue fw-700">→</span> หรือ <span class="c-blue fw-700">Space</span> เพื่อไปสไลด์ถัดไป &nbsp;|&nbsp; กด <span class="c-blue fw-700">←</span> เพื่อย้อนกลับ
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 2: OVERVIEW -->
+    <!-- ============================================================ -->
+    <div class="slide" data-slide="2">
+        <div class="slide-header">
+            <div class="slide-number">01</div>
+            <div>
+                <div class="slide-title">ภาพรวมระบบ (System Overview)</div>
+                <div class="slide-subtitle">AI-Integrated Software Development Lifecycle Template</div>
+            </div>
+        </div>
+        <div class="slide-content">
+            <div class="highlight-box">
+                <strong class="c-blue">AI Code Template</strong> คือระบบ Template สำหรับนำ AI มาช่วยดำเนินกระบวนการพัฒนาซอฟต์แวร์ครบวงจร ตั้งแต่รับ Requirement จนถึง Deploy Production — แบ่งเป็น <strong class="c-green">10 Roles</strong> และ <strong class="c-yellow">4 Phases</strong> ที่ทำงานร่วมกันเป็นระบบ
+            </div>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-icon c-blue"><i class="fas fa-users-cog"></i></div>
+                    <span class="metric-value">10</span>
+                    <div class="metric-label">AI Roles<br><span style="font-size:0.7rem;opacity:0.6">Requirement → PM</span></div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon c-purple"><i class="fas fa-layer-group"></i></div>
+                    <span class="metric-value" style="color:var(--neon-purple)">4</span>
+                    <div class="metric-label">Development Phases<br><span style="font-size:0.7rem;opacity:0.6">Design → Summary</span></div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon c-green"><i class="fas fa-file-alt"></i></div>
+                    <span class="metric-value" style="color:var(--neon-green)">47</span>
+                    <div class="metric-label">Template Files<br><span style="font-size:0.7rem;opacity:0.6">ครบทุก Deliverable</span></div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon c-yellow"><i class="fas fa-bolt"></i></div>
+                    <span class="metric-value" style="color:var(--neon-yellow)">2</span>
+                    <div class="metric-label">Modes<br><span style="font-size:0.7rem;opacity:0.6">Auto-Pipeline / Manual</span></div>
+                </div>
+            </div>
+            <div class="two-col" style="margin-top:16px;">
+                <div class="glass-card">
+                    <div class="section-title"><i class="fas fa-robot"></i> Auto-Pipeline Mode</div>
+                    <ul class="cyber-list">
+                        <li><i class="fas fa-check-circle"></i>กรอก requirement_template.md เพียงครั้งเดียว</li>
+                        <li><i class="fas fa-check-circle"></i>AI ดำเนินการทุก Role อัตโนมัติ</li>
+                        <li><i class="fas fa-check-circle"></i>หยุด Checkpoint ทุก Phase ให้ Review</li>
+                        <li><i class="fas fa-check-circle"></i>Sprint-based Development รองรับ Context Window</li>
+                    </ul>
+                </div>
+                <div class="glass-card">
+                    <div class="section-title"><i class="fas fa-hand-pointer"></i> Manual Mode</div>
+                    <ul class="cyber-list">
+                        <li><i class="fas fa-check-circle"></i>เลือกทำทีละ Role ตามต้องการ</li>
+                        <li><i class="fas fa-check-circle"></i>เหมาะสำหรับงานเฉพาะด้าน</li>
+                        <li><i class="fas fa-check-circle"></i>ควบคุมทุกขั้นตอนได้เอง</li>
+                        <li><i class="fas fa-check-circle"></i>ใช้ templates/ เป็น deliverable structure</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer"><span>AI Code Template — Easy Buy PCL</span><span class="c-blue">Overview</span></div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 3: 10 ROLES -->
+    <!-- ============================================================ -->
+    <div class="slide" data-slide="3">
+        <div class="slide-header">
+            <div class="slide-number">02</div>
+            <div>
+                <div class="slide-title">10 AI Roles — ทีมพัฒนาเสมือน</div>
+                <div class="slide-subtitle">แต่ละ Role มีหน้าที่เฉพาะทาง + Prompt + Templates ของตัวเอง</div>
+            </div>
+        </div>
+        <div class="slide-content">
+            <div class="roles-grid">
+                <div class="role-card" style="background:rgba(0,243,255,0.08);border-color:rgba(0,243,255,0.4);">
+                    <div class="role-num c-blue">01</div>
+                    <div class="role-icon">📋</div>
+                    <div class="role-name c-blue">Requirement Analyst</div>
+                    <div class="role-phase">Phase 1</div>
+                </div>
+                <div class="role-card" style="background:rgba(176,38,255,0.08);border-color:rgba(176,38,255,0.4);">
+                    <div class="role-num c-purple">02</div>
+                    <div class="role-icon">🏗️</div>
+                    <div class="role-name c-purple">System Architect</div>
+                    <div class="role-phase">Phase 1</div>
+                </div>
+                <div class="role-card" style="background:rgba(255,0,255,0.08);border-color:rgba(255,0,255,0.4);">
+                    <div class="role-num c-pink">03</div>
+                    <div class="role-icon">🎨</div>
+                    <div class="role-name c-pink">UX/UI Designer</div>
+                    <div class="role-phase">Phase 1</div>
+                </div>
+                <div class="role-card" style="background:rgba(0,255,136,0.08);border-color:rgba(0,255,136,0.4);">
+                    <div class="role-num c-green">04</div>
+                    <div class="role-icon">💻</div>
+                    <div class="role-name c-green">Software Developer</div>
+                    <div class="role-phase">Phase 2</div>
+                </div>
+                <div class="role-card" style="background:rgba(0,243,255,0.08);border-color:rgba(0,243,255,0.4);">
+                    <div class="role-num c-blue">05</div>
+                    <div class="role-icon">🔍</div>
+                    <div class="role-name c-blue">Code Reviewer</div>
+                    <div class="role-phase">Phase 2</div>
+                </div>
+                <div class="role-card" style="background:rgba(255,140,0,0.08);border-color:rgba(255,140,0,0.4);">
+                    <div class="role-num c-orange">06</div>
+                    <div class="role-icon">🛡️</div>
+                    <div class="role-name c-orange">Security Engineer</div>
+                    <div class="role-phase">Phase 2</div>
+                </div>
+                <div class="role-card" style="background:rgba(255,255,0,0.08);border-color:rgba(255,255,0,0.4);">
+                    <div class="role-num c-yellow">07</div>
+                    <div class="role-icon">🧪</div>
+                    <div class="role-name c-yellow">QA / Tester</div>
+                    <div class="role-phase">Phase 3</div>
+                </div>
+                <div class="role-card" style="background:rgba(176,38,255,0.08);border-color:rgba(176,38,255,0.4);">
+                    <div class="role-num c-purple">08</div>
+                    <div class="role-icon">⚙️</div>
+                    <div class="role-name c-purple">DevOps Engineer</div>
+                    <div class="role-phase">Phase 3</div>
+                </div>
+                <div class="role-card" style="background:rgba(0,255,136,0.08);border-color:rgba(0,255,136,0.4);">
+                    <div class="role-num c-green">09</div>
+                    <div class="role-icon">📝</div>
+                    <div class="role-name c-green">Technical Writer</div>
+                    <div class="role-phase">Phase 3</div>
+                </div>
+                <div class="role-card" style="background:rgba(255,0,255,0.08);border-color:rgba(255,0,255,0.4);">
+                    <div class="role-num c-pink">10</div>
+                    <div class="role-icon">👔</div>
+                    <div class="role-name c-pink">Product Owner / PM</div>
+                    <div class="role-phase">Phase 4</div>
+                </div>
+            </div>
+            <div class="two-col" style="margin-top:14px;">
+                <div class="glass-card">
+                    <div class="section-title"><i class="fas fa-folder-open"></i> Prompt Files</div>
+                    <div style="font-size:0.82rem;color:rgba(255,255,255,0.75);">
+                        แต่ละ Role มีไฟล์ Prompt อยู่ใน <span class="tag tag-blue">.ai-prompts/</span><br>
+                        เช่น <code style="color:var(--neon-green);font-size:0.75rem;">.ai-prompts/01-requirements/prompt.md</code><br><br>
+                        ทุก Prompt มี <strong class="c-blue">7 Sections</strong> มาตรฐาน:<br>
+                        Role Identity → Context Injection → Thinking Protocol<br>
+                        → Core Instructions → Few-Shot → Output Schema → Handoff
+                    </div>
+                </div>
+                <div class="glass-card">
+                    <div class="section-title"><i class="fas fa-exchange-alt"></i> Context Flow ระหว่าง Roles</div>
+                    <div style="font-size:0.8rem;color:rgba(255,255,255,0.75);">
+                        Role ถัดไปอ่าน Output จาก Role ก่อนหน้าโดยอัตโนมัติ:<br><br>
+                        <span class="c-blue">Role 1</span> → requirements-document, user-story-map<br>
+                        <span class="c-purple">Role 2</span> → อ่าน Role 1 output<br>
+                        <span class="c-pink">Role 3</span> → อ่าน Role 1+2 output<br>
+                        <span class="c-green">Role 4</span> → อ่าน Role 1+2+3 output<br>
+                        <span class="c-orange">Role 5,6</span> → อ่าน Source code จาก Role 4<br>
+                        <span class="c-yellow">Role 7-10</span> → อ่านจาก Progress Dashboard
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer"><span>AI Code Template — Easy Buy PCL</span><span class="c-blue">10 Roles</span></div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 4: AUTO-PIPELINE -->
+    <!-- ============================================================ -->
+    <div class="slide" data-slide="4">
+        <div class="slide-header">
+            <div class="slide-number">03</div>
+            <div>
+                <div class="slide-title">Auto-Pipeline Workflow</div>
+                <div class="slide-subtitle">กระบวนการอัตโนมัติครบ 4 Phase — จาก Requirement ถึง Delivery</div>
+            </div>
+        </div>
+        <div class="slide-content">
+            <div class="highlight-box green">
+                <strong class="c-green">วิธีเริ่ม:</strong> กรอก <code style="color:var(--neon-yellow)">requirement_template.md</code> แล้วสั่ง AI ว่า <em>"เริ่มพัฒนาตาม auto-pipeline จาก requirement_template.md"</em>
+            </div>
+
+            <div style="margin-top:14px;">
+                <div class="section-title"><i class="fas fa-sitemap"></i> Full Pipeline Flow</div>
+                <div class="pipeline-container">
+                    <div class="pipeline-step" style="background:rgba(0,243,255,0.1);border-color:rgba(0,243,255,0.4);">
+                        <i class="fas fa-file-alt c-blue"></i>
+                        <span style="color:var(--neon-blue)">กรอก<br>Requirement</span>
+                    </div>
+                    <div class="pipeline-arrow"><i class="fas fa-chevron-right"></i></div>
+                    <div class="pipeline-step" style="background:rgba(0,243,255,0.1);border-color:rgba(0,243,255,0.4);">
+                        <i class="fas fa-search c-blue"></i>
+                        <span style="color:var(--neon-blue)">AI ตรวจสอบ<br>ความครบถ้วน</span>
+                    </div>
+                    <div class="pipeline-arrow"><i class="fas fa-chevron-right"></i></div>
+                    <div class="pipeline-step" style="background:rgba(176,38,255,0.1);border-color:rgba(176,38,255,0.4);">
+                        <i class="fas fa-layer-group c-purple"></i>
+                        <span style="color:var(--neon-purple)">Phase 1<br>R&D Design</span>
+                    </div>
+                    <div class="pipeline-checkpoint">⏸ CP1<br>Review</div>
+                    <div class="pipeline-step" style="background:rgba(0,255,136,0.1);border-color:rgba(0,255,136,0.4);">
+                        <i class="fas fa-code c-green"></i>
+                        <span style="color:var(--neon-green)">Phase 2<br>Dev Sprints</span>
+                    </div>
+                    <div class="pipeline-checkpoint">⏸ CP2<br>Sprint</div>
+                    <div class="pipeline-step" style="background:rgba(255,255,0,0.1);border-color:rgba(255,255,0,0.4);">
+                        <i class="fas fa-flask c-yellow"></i>
+                        <span style="color:var(--neon-yellow)">Phase 3<br>QA+DevOps</span>
+                    </div>
+                    <div class="pipeline-checkpoint">⏸ CP3<br>Review</div>
+                    <div class="pipeline-step" style="background:rgba(255,0,255,0.1);border-color:rgba(255,0,255,0.4);">
+                        <i class="fas fa-flag-checkered c-pink"></i>
+                        <span style="color:var(--neon-pink)">Phase 4<br>Summary</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="three-col" style="margin-top:14px;">
+                <div class="glass-card">
+                    <div style="font-family:'Orbitron',sans-serif;font-size:0.85rem;color:var(--neon-blue);margin-bottom:8px;"><i class="fas fa-pause-circle"></i> Checkpoint 1</div>
+                    <div style="font-size:0.78rem;color:rgba(255,255,255,0.75);">
+                        หลัง Phase 1 เสร็จ<br>
+                        Review: Requirements, Architecture, UX/UI, Sprint Plan<br>
+                        <span class="tag tag-yellow" style="margin-top:6px;display:inline-block;">User Approval Required</span>
+                    </div>
+                </div>
+                <div class="glass-card">
+                    <div style="font-family:'Orbitron',sans-serif;font-size:0.85rem;color:var(--neon-green);margin-bottom:8px;"><i class="fas fa-pause-circle"></i> Sprint Review</div>
+                    <div style="font-size:0.78rem;color:rgba(255,255,255,0.75);">
+                        หลังทุก Sprint ใน Phase 2<br>
+                        Review: Code, Code Review, Security Scan<br>
+                        <span class="tag tag-green" style="margin-top:6px;display:inline-block;">Per-Sprint Checkpoint</span>
+                    </div>
+                </div>
+                <div class="glass-card">
+                    <div style="font-family:'Orbitron',sans-serif;font-size:0.85rem;color:var(--neon-yellow);margin-bottom:8px;"><i class="fas fa-pause-circle"></i> Checkpoint 2 & 3</div>
+                    <div style="font-size:0.78rem;color:rgba(255,255,255,0.75);">
+                        CP2: หลัง Phase 2 รวม (ภาพรวม Sprints)<br>
+                        CP3: หลัง Phase 3 (QA+DevOps+Docs)<br>
+                        <span class="tag tag-blue" style="margin-top:6px;display:inline-block;">Go/No-Go Decision</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight-box" style="margin-top:14px;">
+                <strong class="c-blue">Sprint-based Dev:</strong> Phase 1 จะแบ่งงานเป็น Sprint (2 สัปดาห์/Sprint) — Sprint 1 เน้น Quick Wins (ฟีเจอร์หลักที่เห็นผลเร็ว) — ช่วยจัดการ Context Window ได้ดี เพราะแบ่งงานเป็นส่วนย่อย
+            </div>
+        </div>
+        <div class="slide-footer"><span>AI Code Template — Easy Buy PCL</span><span class="c-blue">Auto-Pipeline</span></div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 5: PHASE 1 -->
+    <!-- ============================================================ -->
+    <div class="slide" data-slide="5">
+        <div class="slide-header">
+            <div class="slide-number">04</div>
+            <div>
+                <div class="slide-title">Phase 1 — Requirements &amp; Design</div>
+                <div class="slide-subtitle">Role 1: Requirement Analyst · Role 2: System Architect · Role 3: UX/UI Designer</div>
+            </div>
+        </div>
+        <div class="slide-content">
+            <div class="three-col">
+                <div class="glass-card" style="border-color:rgba(0,243,255,0.3);">
+                    <div style="text-align:center;margin-bottom:12px;">
+                        <div style="font-size:2rem;">📋</div>
+                        <div style="font-family:'Orbitron',sans-serif;font-size:0.85rem;color:var(--neon-blue);">Role 1</div>
+                        <div style="font-weight:700;font-size:0.9rem;">Requirement Analyst</div>
+                    </div>
+                    <div class="section-title" style="font-size:0.72rem;">Deliverables</div>
+                    <ul class="cyber-list">
+                        <li><i class="fas fa-file"></i>requirements-document.md</li>
+                        <li><i class="fas fa-file"></i>user-story-map.md</li>
+                        <li><i class="fas fa-file"></i>priority-matrix.md</li>
+                        <li><i class="fas fa-file"></i>risk-analysis.md</li>
+                    </ul>
+                    <div style="margin-top:10px;font-size:0.75rem;color:rgba(255,255,255,0.6);">
+                        Input: <span class="tag tag-blue">requirement_template.md</span>
+                    </div>
+                </div>
+                <div class="glass-card" style="border-color:rgba(176,38,255,0.3);">
+                    <div style="text-align:center;margin-bottom:12px;">
+                        <div style="font-size:2rem;">🏗️</div>
+                        <div style="font-family:'Orbitron',sans-serif;font-size:0.85rem;color:var(--neon-purple);">Role 2</div>
+                        <div style="font-weight:700;font-size:0.9rem;">System Architect</div>
+                    </div>
+                    <div class="section-title" style="font-size:0.72rem;">Deliverables</div>
+                    <ul class="cyber-list">
+                        <li><i class="fas fa-file"></i>architecture-diagram.md</li>
+                        <li><i class="fas fa-file"></i>tech-stack.md</li>
+                        <li><i class="fas fa-file"></i>api-spec.md</li>
+                        <li><i class="fas fa-file"></i>db-schema.md</li>
+                        <li><i class="fas fa-file"></i>data-flow.md</li>
+                        <li><i class="fas fa-file"></i>adr-log.md</li>
+                    </ul>
+                    <div style="margin-top:10px;font-size:0.75rem;color:rgba(255,255,255,0.6);">
+                        Input: <span class="tag tag-blue">Role 1 output</span>
+                    </div>
+                </div>
+                <div class="glass-card" style="border-color:rgba(255,0,255,0.3);">
+                    <div style="text-align:center;margin-bottom:12px;">
+                        <div style="font-size:2rem;">🎨</div>
+                        <div style="font-family:'Orbitron',sans-serif;font-size:0.85rem;color:var(--neon-pink);">Role 3</div>
+                        <div style="font-weight:700;font-size:0.9rem;">UX/UI Designer</div>
+                    </div>
+                    <div class="section-title" style="font-size:0.72rem;">Deliverables</div>
+                    <ul class="cyber-list">
+                        <li><i class="fas fa-file"></i>user-personas.md</li>
+                        <li><i class="fas fa-file"></i>wireframes.md</li>
+                        <li><i class="fas fa-file"></i>journey-map.md</li>
+                        <li><i class="fas fa-file"></i>design-system.md</li>
+                        <li><i class="fas fa-file"></i>usability-testing.md</li>
+                    </ul>
+                    <div style="margin-top:10px;font-size:0.75rem;color:rgba(255,255,255,0.6);">
+                        Input: <span class="tag tag-blue">Role 1+2 output</span>
+                    </div>
+                </div>
+            </div>
+            <div class="glass-card" style="margin-top:14px;">
+                <div class="section-title"><i class="fas fa-calendar-alt"></i> Sprint Planning — ผลลัพธ์สุดท้ายของ Phase 1</div>
+                <div class="two-col">
+                    <ul class="cyber-list">
+                        <li><i class="fas fa-check"></i>แบ่งงานทั้งหมดเป็น Sprint (Sprint 1, 2, 3...)</li>
+                        <li><i class="fas fa-check"></i>กำหนด Story Points ต่อ Sprint</li>
+                        <li><i class="fas fa-check"></i>Sprint 1 = Quick Wins, MVP features</li>
+                    </ul>
+                    <ul class="cyber-list">
+                        <li><i class="fas fa-check"></i>Output: <span class="tag tag-blue">sprint-plan.md</span></li>
+                        <li><i class="fas fa-check"></i>ผู้ใช้ Review + Approve ก่อนเริ่ม Phase 2</li>
+                        <li><i class="fas fa-check"></i>Checkpoint 1 ⏸ — Go/No-Go</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer"><span>AI Code Template — Easy Buy PCL</span><span class="c-blue">Phase 1</span></div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 6: PHASE 2 -->
+    <!-- ============================================================ -->
+    <div class="slide" data-slide="6">
+        <div class="slide-header">
+            <div class="slide-number">05</div>
+            <div>
+                <div class="slide-title">Phase 2 — Sprint-based Development</div>
+                <div class="slide-subtitle">Role 4: Developer · Role 5: Code Reviewer · Role 6: Security Engineer</div>
+            </div>
+        </div>
+        <div class="slide-content">
+            <div class="highlight-box green">
+                <strong class="c-green">Pattern ต่อ Sprint:</strong> Developer (R4) → Code Review (R5) → Security Scan (R6) → Sprint Review ⏸ → Sprint ถัดไป
+            </div>
+            <div class="three-col" style="margin-top:14px;">
+                <div class="glass-card" style="border-color:rgba(0,255,136,0.3);">
+                    <div style="text-align:center;margin-bottom:12px;">
+                        <div style="font-size:2rem;">💻</div>
+                        <div style="font-family:'Orbitron',sans-serif;font-size:0.85rem;color:var(--neon-green);">Role 4</div>
+                        <div style="font-weight:700;">Software Developer</div>
+                    </div>
+                    <ul class="cyber-list">
+                        <li><i class="fas fa-file"></i>Source code (ตาม stories)</li>
+                        <li><i class="fas fa-file"></i>unit-tests.md</li>
+                        <li><i class="fas fa-file"></i>code-structure.md</li>
+                        <li><i class="fas fa-file"></i>readme-template.md</li>
+                        <li><i class="fas fa-file"></i>pull-request-template.md</li>
+                    </ul>
+                    <div class="highlight-box green" style="margin-top:10px;font-size:0.75rem;">
+                        <strong>TDD:</strong> Red→Green→Refactor<br>Unit Test ≥ 80% coverage
+                    </div>
+                </div>
+                <div class="glass-card" style="border-color:rgba(0,243,255,0.3);">
+                    <div style="text-align:center;margin-bottom:12px;">
+                        <div style="font-size:2rem;">🔍</div>
+                        <div style="font-family:'Orbitron',sans-serif;font-size:0.85rem;color:var(--neon-blue);">Role 5</div>
+                        <div style="font-weight:700;">Code Reviewer</div>
+                    </div>
+                    <ul class="cyber-list">
+                        <li><i class="fas fa-file"></i>review-checklist.md</li>
+                        <li><i class="fas fa-file"></i>review-report.md</li>
+                    </ul>
+                    <div style="margin-top:10px;font-size:0.78rem;color:rgba(255,255,255,0.7);">ตรวจ:</div>
+                    <ul class="cyber-list" style="font-size:0.78rem;">
+                        <li><i class="fas fa-check"></i>Code Quality &amp; Standards</li>
+                        <li><i class="fas fa-check"></i>Naming Conventions</li>
+                        <li><i class="fas fa-check"></i>Test Coverage</li>
+                        <li><i class="fas fa-check"></i>Architecture Compliance</li>
+                    </ul>
+                </div>
+                <div class="glass-card" style="border-color:rgba(255,140,0,0.3);">
+                    <div style="text-align:center;margin-bottom:12px;">
+                        <div style="font-size:2rem;">🛡️</div>
+                        <div style="font-family:'Orbitron',sans-serif;font-size:0.85rem;color:var(--neon-orange);">Role 6</div>
+                        <div style="font-weight:700;">Security Engineer</div>
+                    </div>
+                    <ul class="cyber-list">
+                        <li><i class="fas fa-file"></i>threat-model.md</li>
+                        <li><i class="fas fa-file"></i>security-report.md</li>
+                        <li><i class="fas fa-file"></i>owasp-assessment.md</li>
+                        <li><i class="fas fa-file"></i>security-policies.md</li>
+                        <li><i class="fas fa-file"></i>remediation-plan.md</li>
+                    </ul>
+                    <div class="highlight-box" style="margin-top:10px;font-size:0.75rem;border-left-color:var(--neon-orange);background:rgba(255,140,0,0.05);">
+                        เป้าหมาย: <strong class="c-orange">No Critical/High vulnerabilities</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="glass-card" style="margin-top:14px;">
+                <div class="section-title"><i class="fas fa-repeat"></i> Sprint Loop</div>
+                <div class="sprint-timeline">
+                    <div class="sprint-row">
+                        <div class="sprint-badge" style="background:rgba(0,255,136,0.15);border:1px solid rgba(0,255,136,0.4);color:var(--neon-green);">Sprint 1</div>
+                        <div class="sprint-bar" style="background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.3);color:var(--neon-green);">MVP Core Features — Auth, Dashboard, Main CRUD</div>
+                    </div>
+                    <div class="sprint-row">
+                        <div class="sprint-badge" style="background:rgba(0,243,255,0.15);border:1px solid rgba(0,243,255,0.4);color:var(--neon-blue);">Sprint 2</div>
+                        <div class="sprint-bar" style="background:rgba(0,243,255,0.1);border:1px solid rgba(0,243,255,0.3);color:var(--neon-blue);">Extended Features — Integrations, Reports, Notifications</div>
+                    </div>
+                    <div class="sprint-row">
+                        <div class="sprint-badge" style="background:rgba(176,38,255,0.15);border:1px solid rgba(176,38,255,0.4);color:var(--neon-purple);">Sprint N</div>
+                        <div class="sprint-bar" style="background:rgba(176,38,255,0.1);border:1px solid rgba(176,38,255,0.3);color:var(--neon-purple);">Polish, Performance, Edge Cases — ตามที่ Sprint Plan กำหนด</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer"><span>AI Code Template — Easy Buy PCL</span><span class="c-blue">Phase 2</span></div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 7: PHASE 3 -->
+    <!-- ============================================================ -->
+    <div class="slide" data-slide="7">
+        <div class="slide-header">
+            <div class="slide-number">06</div>
+            <div>
+                <div class="slide-title">Phase 3 — Testing &amp; Deployment</div>
+                <div class="slide-subtitle">Role 7: QA/Tester · Role 8: DevOps · Role 9: Technical Writer</div>
+            </div>
+        </div>
+        <div class="slide-content">
+            <div class="three-col">
+                <div class="glass-card" style="border-color:rgba(255,255,0,0.3);">
+                    <div style="text-align:center;margin-bottom:12px;">
+                        <div style="font-size:2rem;">🧪</div>
+                        <div style="font-family:'Orbitron',sans-serif;font-size:0.85rem;color:var(--neon-yellow);">Role 7</div>
+                        <div style="font-weight:700;">QA / Tester</div>
+                    </div>
+                    <ul class="cyber-list">
+                        <li><i class="fas fa-file"></i>test-plan.md</li>
+                        <li><i class="fas fa-file"></i>test-cases.md</li>
+                        <li><i class="fas fa-file"></i>bug-report.md</li>
+                        <li><i class="fas fa-file"></i>performance-test.md</li>
+                        <li><i class="fas fa-file"></i>qa-signoff.md</li>
+                    </ul>
+                    <div class="highlight-box yellow" style="margin-top:10px;font-size:0.75rem;">
+                        ผ่านทุก Critical Test Cases<br>Performance ตาม SLA
+                    </div>
+                </div>
+                <div class="glass-card" style="border-color:rgba(176,38,255,0.3);">
+                    <div style="text-align:center;margin-bottom:12px;">
+                        <div style="font-size:2rem;">⚙️</div>
+                        <div style="font-family:'Orbitron',sans-serif;font-size:0.85rem;color:var(--neon-purple);">Role 8</div>
+                        <div style="font-weight:700;">DevOps Engineer</div>
+                    </div>
+                    <ul class="cyber-list">
+                        <li><i class="fas fa-file"></i>cicd-pipeline.md</li>
+                        <li><i class="fas fa-file"></i>docker-config.md</li>
+                        <li><i class="fas fa-file"></i>infrastructure.md</li>
+                        <li><i class="fas fa-file"></i>environments.md</li>
+                        <li><i class="fas fa-file"></i>monitoring.md</li>
+                        <li><i class="fas fa-file"></i>runbooks.md</li>
+                    </ul>
+                </div>
+                <div class="glass-card" style="border-color:rgba(0,255,136,0.3);">
+                    <div style="text-align:center;margin-bottom:12px;">
+                        <div style="font-size:2rem;">📝</div>
+                        <div style="font-family:'Orbitron',sans-serif;font-size:0.85rem;color:var(--neon-green);">Role 9</div>
+                        <div style="font-weight:700;">Technical Writer</div>
+                    </div>
+                    <ul class="cyber-list">
+                        <li><i class="fas fa-file"></i>api-docs.md</li>
+                        <li><i class="fas fa-file"></i>user-manual.md</li>
+                        <li><i class="fas fa-file"></i>onboarding.md</li>
+                        <li><i class="fas fa-file"></i>troubleshooting.md</li>
+                        <li><i class="fas fa-file"></i>release-notes.md</li>
+                        <li><i class="fas fa-file"></i>adr-template.md</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="two-col" style="margin-top:14px;">
+                <div class="glass-card">
+                    <div class="section-title"><i class="fas fa-network-wired"></i> CI/CD Pipeline (Role 8)</div>
+                    <div class="pipeline-container" style="justify-content:flex-start;flex-wrap:nowrap;">
+                        <div class="pipeline-step" style="background:rgba(176,38,255,0.1);border-color:rgba(176,38,255,0.4);min-width:70px;padding:8px;">
+                            <i class="fab fa-git-alt c-purple" style="font-size:1rem;"></i>
+                            <span style="color:var(--neon-purple);font-size:0.65rem;">Push</span>
+                        </div>
+                        <div class="pipeline-arrow" style="font-size:0.8rem;"><i class="fas fa-chevron-right"></i></div>
+                        <div class="pipeline-step" style="background:rgba(0,243,255,0.1);border-color:rgba(0,243,255,0.4);min-width:70px;padding:8px;">
+                            <i class="fas fa-vial c-blue" style="font-size:1rem;"></i>
+                            <span style="color:var(--neon-blue);font-size:0.65rem;">Test</span>
+                        </div>
+                        <div class="pipeline-arrow" style="font-size:0.8rem;"><i class="fas fa-chevron-right"></i></div>
+                        <div class="pipeline-step" style="background:rgba(0,255,136,0.1);border-color:rgba(0,255,136,0.4);min-width:70px;padding:8px;">
+                            <i class="fas fa-cube c-green" style="font-size:1rem;"></i>
+                            <span style="color:var(--neon-green);font-size:0.65rem;">Build</span>
+                        </div>
+                        <div class="pipeline-arrow" style="font-size:0.8rem;"><i class="fas fa-chevron-right"></i></div>
+                        <div class="pipeline-step" style="background:rgba(255,140,0,0.1);border-color:rgba(255,140,0,0.4);min-width:70px;padding:8px;">
+                            <i class="fas fa-shield-alt c-orange" style="font-size:1rem;"></i>
+                            <span style="color:var(--neon-orange);font-size:0.65rem;">Scan</span>
+                        </div>
+                        <div class="pipeline-arrow" style="font-size:0.8rem;"><i class="fas fa-chevron-right"></i></div>
+                        <div class="pipeline-step" style="background:rgba(255,0,255,0.1);border-color:rgba(255,0,255,0.4);min-width:70px;padding:8px;">
+                            <i class="fas fa-rocket c-pink" style="font-size:1rem;"></i>
+                            <span style="color:var(--neon-pink);font-size:0.65rem;">Deploy</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card">
+                    <div class="section-title"><i class="fas fa-check-double"></i> QA Sign-off เกณฑ์</div>
+                    <ul class="checklist">
+                        <li><i class="fas fa-circle-check check-ok"></i>Critical Test Cases ผ่านทั้งหมด</li>
+                        <li><i class="fas fa-circle-check check-ok"></i>No Critical/High Security vulnerabilities</li>
+                        <li><i class="fas fa-circle-check check-ok"></i>Performance ตาม SLA (Response Time, Uptime)</li>
+                        <li><i class="fas fa-circle-check check-ok"></i>Unit Test Coverage ≥ 80%</li>
+                        <li><i class="fas fa-circle-check check-ok"></i>Documentation ครบถ้วน</li>
+                        <li><i class="fas fa-circle-check check-ok"></i>Monitoring &amp; Alerting พร้อม</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer"><span>AI Code Template — Easy Buy PCL</span><span class="c-blue">Phase 3</span></div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 8: PHASE 4 -->
+    <!-- ============================================================ -->
+    <div class="slide" data-slide="8">
+        <div class="slide-header">
+            <div class="slide-number">07</div>
+            <div>
+                <div class="slide-title">Phase 4 — Project Summary</div>
+                <div class="slide-subtitle">Role 10: Product Owner / PM — สรุปโปรเจกต์และส่งมอบ</div>
+            </div>
+        </div>
+        <div class="slide-content">
+            <div class="two-col">
+                <div>
+                    <div class="glass-card" style="border-color:rgba(255,0,255,0.3);">
+                        <div style="text-align:center;margin-bottom:14px;">
+                            <div style="font-size:2.5rem;">👔</div>
+                            <div style="font-family:'Orbitron',sans-serif;font-size:1rem;color:var(--neon-pink);">Role 10</div>
+                            <div style="font-weight:700;font-size:1rem;">Product Owner / PM</div>
+                        </div>
+                        <div class="section-title" style="font-size:0.75rem;">Deliverables</div>
+                        <ul class="cyber-list">
+                            <li><i class="fas fa-file c-pink"></i>status-report.md</li>
+                            <li><i class="fas fa-file c-pink"></i>roadmap.md</li>
+                            <li><i class="fas fa-file c-pink"></i>risk-register.md</li>
+                            <li><i class="fas fa-file c-pink"></i>meeting-templates.md</li>
+                            <li><i class="fas fa-file c-pink"></i>sprint-retrospective.md</li>
+                            <li><i class="fas fa-file c-pink"></i>progress-dashboard.md (final update)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="glass-card" style="margin-bottom:14px;">
+                        <div class="section-title"><i class="fas fa-tasks"></i> หน้าที่ของ PM</div>
+                        <ul class="cyber-list">
+                            <li><i class="fas fa-chart-line c-blue"></i>Track ความคืบหน้าทั้งโปรเจกต์</li>
+                            <li><i class="fas fa-exclamation-triangle c-yellow"></i>Manage risks &amp; blockers</li>
+                            <li><i class="fas fa-users c-green"></i>Communicate กับ Stakeholders</li>
+                            <li><i class="fas fa-flag-checkered c-pink"></i>สรุป Lessons Learned</li>
+                            <li><i class="fas fa-check-double c-green"></i>ตรวจ Definition of Done ครบ</li>
+                        </ul>
+                    </div>
+                    <div class="glass-card">
+                        <div class="section-title"><i class="fas fa-history"></i> Sprint Retrospective</div>
+                        <div style="font-size:0.82rem;color:rgba(255,255,255,0.75);">
+                            สะสม Retrospective ทุก Sprint:<br>
+                            ✅ <strong>What Went Well</strong> — สิ่งที่ทำได้ดี<br>
+                            🔧 <strong>What to Improve</strong> — สิ่งที่ควรปรับ<br>
+                            📋 <strong>Action Items</strong> — แผนแก้ไข Sprint ถัดไป<br>
+                            📊 <strong>Velocity</strong> — Story Points จริง vs Plan
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="highlight-box pink" style="margin-top:14px;">
+                <strong class="c-pink">Final Delivery:</strong> PM ส่งมอบ Progress Dashboard 100% + Project Summary รวม Lessons Learned ทุก Sprint + Roadmap สำหรับ Future Development
+            </div>
+        </div>
+        <div class="slide-footer"><span>AI Code Template — Easy Buy PCL</span><span class="c-blue">Phase 4</span></div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 9: TEMPLATES STRUCTURE -->
+    <!-- ============================================================ -->
+    <div class="slide" data-slide="9">
+        <div class="slide-header">
+            <div class="slide-number">08</div>
+            <div>
+                <div class="slide-title">Template Structure — 47 ไฟล์</div>
+                <div class="slide-subtitle">Deliverable templates ครอบคลุมทุก Phase และ Role</div>
+            </div>
+        </div>
+        <div class="slide-content">
+            <div class="folder-grid">
+                <div class="folder-card" style="background:rgba(0,243,255,0.07);border-color:rgba(0,243,255,0.35);">
+                    <div class="folder-icon">📋</div>
+                    <div class="folder-name c-blue">01-requirements</div>
+                    <div class="folder-count c-blue">4 files</div>
+                    <div style="font-size:0.65rem;margin-top:6px;color:rgba(255,255,255,0.6);">
+                        requirements-document<br>user-story-map<br>priority-matrix<br>risk-analysis
+                    </div>
+                </div>
+                <div class="folder-card" style="background:rgba(176,38,255,0.07);border-color:rgba(176,38,255,0.35);">
+                    <div class="folder-icon">🏗️</div>
+                    <div class="folder-name c-purple">02-architecture</div>
+                    <div class="folder-count c-purple">6 files</div>
+                    <div style="font-size:0.65rem;margin-top:6px;color:rgba(255,255,255,0.6);">
+                        architecture-diagram<br>tech-stack<br>api-spec<br>db-schema<br>data-flow<br>adr-log
+                    </div>
+                </div>
+                <div class="folder-card" style="background:rgba(255,0,255,0.07);border-color:rgba(255,0,255,0.35);">
+                    <div class="folder-icon">🎨</div>
+                    <div class="folder-name c-pink">03-ux-ui</div>
+                    <div class="folder-count c-pink">5 files</div>
+                    <div style="font-size:0.65rem;margin-top:6px;color:rgba(255,255,255,0.6);">
+                        user-personas<br>wireframes<br>journey-map<br>design-system<br>usability-testing
+                    </div>
+                </div>
+                <div class="folder-card" style="background:rgba(0,255,136,0.07);border-color:rgba(0,255,136,0.35);">
+                    <div class="folder-icon">💻</div>
+                    <div class="folder-name c-green">04-development</div>
+                    <div class="folder-count c-green">4 files</div>
+                    <div style="font-size:0.65rem;margin-top:6px;color:rgba(255,255,255,0.6);">
+                        pull-request-template<br>readme-template<br>unit-tests<br>code-structure
+                    </div>
+                </div>
+                <div class="folder-card" style="background:rgba(0,243,255,0.07);border-color:rgba(0,243,255,0.35);">
+                    <div class="folder-icon">🔍</div>
+                    <div class="folder-name c-blue">05-code-review</div>
+                    <div class="folder-count c-blue">2 files</div>
+                    <div style="font-size:0.65rem;margin-top:6px;color:rgba(255,255,255,0.6);">
+                        review-checklist<br>review-report
+                    </div>
+                </div>
+                <div class="folder-card" style="background:rgba(255,140,0,0.07);border-color:rgba(255,140,0,0.35);">
+                    <div class="folder-icon">🛡️</div>
+                    <div class="folder-name c-orange">06-security</div>
+                    <div class="folder-count c-orange">5 files</div>
+                    <div style="font-size:0.65rem;margin-top:6px;color:rgba(255,255,255,0.6);">
+                        threat-model<br>security-report<br>owasp-assessment<br>security-policies<br>remediation-plan
+                    </div>
+                </div>
+                <div class="folder-card" style="background:rgba(255,255,0,0.07);border-color:rgba(255,255,0,0.35);">
+                    <div class="folder-icon">🧪</div>
+                    <div class="folder-name c-yellow">07-qa-testing</div>
+                    <div class="folder-count c-yellow">5 files</div>
+                    <div style="font-size:0.65rem;margin-top:6px;color:rgba(255,255,255,0.6);">
+                        test-plan<br>test-cases<br>bug-report<br>performance-test<br>qa-signoff
+                    </div>
+                </div>
+                <div class="folder-card" style="background:rgba(176,38,255,0.07);border-color:rgba(176,38,255,0.35);">
+                    <div class="folder-icon">⚙️</div>
+                    <div class="folder-name c-purple">08-devops</div>
+                    <div class="folder-count c-purple">6 files</div>
+                    <div style="font-size:0.65rem;margin-top:6px;color:rgba(255,255,255,0.6);">
+                        cicd-pipeline<br>docker-config<br>infrastructure<br>environments<br>monitoring<br>runbooks
+                    </div>
+                </div>
+                <div class="folder-card" style="background:rgba(0,255,136,0.07);border-color:rgba(0,255,136,0.35);">
+                    <div class="folder-icon">📝</div>
+                    <div class="folder-name c-green">09-documentation</div>
+                    <div class="folder-count c-green">5 files</div>
+                    <div style="font-size:0.65rem;margin-top:6px;color:rgba(255,255,255,0.6);">
+                        api-docs<br>user-manual<br>onboarding<br>troubleshooting<br>release-notes
+                    </div>
+                </div>
+                <div class="folder-card" style="background:rgba(255,0,255,0.07);border-color:rgba(255,0,255,0.35);">
+                    <div class="folder-icon">👔</div>
+                    <div class="folder-name c-pink">10-project-mgmt</div>
+                    <div class="folder-count c-pink">5 files</div>
+                    <div style="font-size:0.65rem;margin-top:6px;color:rgba(255,255,255,0.6);">
+                        status-report<br>roadmap<br>sprint-plan<br>sprint-retrospective<br>progress-dashboard
+                    </div>
+                </div>
+            </div>
+            <div class="highlight-box" style="margin-top:12px;">
+                <strong class="c-blue">ดูรายละเอียดไฟล์ทั้งหมด:</strong> <code style="color:var(--neon-yellow)">docs/templates-guide.md</code> — อธิบายทุกไฟล์ว่าใช้ทำอะไร, โครงสร้างหลัก, ประโยชน์, ใช้โดย Role ใด
+            </div>
+        </div>
+        <div class="slide-footer"><span>AI Code Template — Easy Buy PCL</span><span class="c-blue">Templates</span></div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 10: STANDARDS -->
+    <!-- ============================================================ -->
+    <div class="slide" data-slide="10">
+        <div class="slide-header">
+            <div class="slide-number">09</div>
+            <div>
+                <div class="slide-title">Company Standards</div>
+                <div class="slide-subtitle">standards/ — Baseline สำหรับทุกโปรเจกต์ในองค์กร</div>
+            </div>
+        </div>
+        <div class="slide-content">
+            <div class="highlight-box">
+                <strong class="c-blue">standards/</strong> คือ Company-wide baseline ที่ใช้ร่วมกันทุกโปรเจกต์ — Project-specific overrides บันทึกใน <code style="color:var(--neon-yellow)">templates/02-architecture/tech-stack.md</code> พร้อมเหตุผล
+            </div>
+            <div class="two-col" style="margin-top:14px;">
+                <div class="glass-card">
+                    <div class="section-title"><i class="fas fa-code"></i> coding-standards.md</div>
+                    <div style="font-size:0.8rem;color:rgba(255,255,255,0.8);margin-bottom:10px;">ใช้โดย: <span class="tag tag-green">Developer (R4)</span> <span class="tag tag-blue">Code Reviewer (R5)</span></div>
+                    <ul class="cyber-list">
+                        <li><i class="fas fa-tag c-blue"></i><strong>Naming Conventions</strong> — files, classes, functions, DB tables, API routes</li>
+                        <li><i class="fab fa-git-alt c-purple"></i><strong>Git Workflow</strong> — branch naming, commit message format, PR process</li>
+                        <li><i class="fas fa-vial c-green"></i><strong>TDD (Pragmatic)</strong> — Red→Green→Refactor, mandatory layers</li>
+                        <li><i class="fas fa-shield-alt c-orange"></i><strong>Security Baseline</strong> — Input validation, Auth patterns, OWASP</li>
+                        <li><i class="fas fa-language c-blue"></i><strong>Language-specific rules</strong> — .NET 10, TypeScript, Python, etc.</li>
+                    </ul>
+                </div>
+                <div class="glass-card">
+                    <div class="section-title"><i class="fas fa-layer-group"></i> tech-stack-catalog.md</div>
+                    <div style="font-size:0.8rem;color:rgba(255,255,255,0.8);margin-bottom:10px;">ใช้โดย: <span class="tag tag-purple">System Architect (R2)</span></div>
+                    <table class="cyber-table">
+                        <tr><th>Status</th><th>ความหมาย</th></tr>
+                        <tr><td><span class="tag tag-green">✅ Approved</span></td><td>ใช้ได้ทันที ไม่ต้องขออนุมัติ</td></tr>
+                        <tr><td><span class="tag tag-yellow">⚠️ Conditional</span></td><td>ใช้ได้ แต่มีเงื่อนไข / ต้องระบุเหตุผล</td></tr>
+                        <tr><td><span class="tag tag-pink">❌ Not Approved</span></td><td>ห้ามใช้ หรือต้องทำ ADR ก่อน</td></tr>
+                    </table>
+                </div>
+            </div>
+            <div class="glass-card" style="margin-top:14px;">
+                <div class="section-title"><i class="fas fa-file-signature"></i> ADR Policy — Architecture Decision Record</div>
+                <div class="two-col">
+                    <div>
+                        <div style="font-size:0.82rem;color:rgba(255,255,255,0.8);">
+                            <strong class="c-yellow">ADR คืออะไร?</strong> — เอกสารบันทึกการตัดสินใจทางสถาปัตยกรรม ว่า "ทำไมถึงเลือก X แทน Y" พร้อม options ที่พิจารณา และผลกระทบ
+                        </div>
+                        <div class="highlight-box yellow" style="margin-top:10px;font-size:0.8rem;">
+                            <strong>ต้องทำ ADR เมื่อ:</strong> เลือกใช้ technology ที่ไม่อยู่ใน Approved list
+                        </div>
+                    </div>
+                    <div>
+                        <ul class="cyber-list">
+                            <li><i class="fas fa-file-alt c-yellow"></i>บันทึกใน <code style="color:var(--neon-green);font-size:0.75rem;">templates/02-architecture/adr-log.md</code></li>
+                            <li><i class="fas fa-history c-blue"></i>Append-only — ไม่ลบ ADR เก่า</li>
+                            <li><i class="fas fa-users c-green"></i>ทีมทั้งหมดต้องรับทราบและ approve</li>
+                            <li><i class="fas fa-book c-purple"></i>เป็น institutional knowledge สำหรับอนาคต</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer"><span>AI Code Template — Easy Buy PCL</span><span class="c-blue">Standards</span></div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 11: PROGRESS DASHBOARD -->
+    <!-- ============================================================ -->
+    <div class="slide" data-slide="11">
+        <div class="slide-header">
+            <div class="slide-number">10</div>
+            <div>
+                <div class="slide-title">Progress Dashboard</div>
+                <div class="slide-subtitle">Single Source of Truth — ทุก Role อ้างอิงไฟล์นี้</div>
+            </div>
+        </div>
+        <div class="slide-content">
+            <div class="highlight-box green">
+                <strong class="c-green">templates/10-project-management/progress-dashboard.md</strong> — AI อัปเดตอัตโนมัติในโหมด Auto-Pipeline ทุกครั้งที่ Role เสร็จงาน, Sprint เสร็จ, หรือ Checkpoint ผ่าน
+            </div>
+            <div class="two-col" style="margin-top:14px;">
+                <div class="glass-card">
+                    <div class="section-title"><i class="fas fa-chart-bar"></i> สิ่งที่ติดตาม</div>
+                    <table class="cyber-table">
+                        <tr><th>Section</th><th>เนื้อหา</th></tr>
+                        <tr><td><span class="c-blue">Project Overview</span></td><td>Overall %, Phase ปัจจุบัน, Role ปัจจุบัน, Status</td></tr>
+                        <tr><td><span class="c-purple">Phase Progress</span></td><td>4 Phases — Not Started / In Progress / Completed</td></tr>
+                        <tr><td><span class="c-green">Role Completion</span></td><td>10 Roles — Status + Deliverables Created + Key Outputs</td></tr>
+                        <tr><td><span class="c-yellow">Sprint Progress</span></td><td>ต่อ Sprint: Stories Done, Points, Code Review, Security</td></tr>
+                        <tr><td><span class="c-orange">Deliverables Registry</span></td><td>ทุกไฟล์ที่สร้าง — ชื่อ, Role, Phase</td></tr>
+                        <tr><td><span class="c-pink">Key Decisions</span></td><td>การตัดสินใจสำคัญ + เหตุผล</td></tr>
+                        <tr><td><span class="c-blue">Issues &amp; Blockers</span></td><td>ปัญหา + Severity + วิธีแก้</td></tr>
+                        <tr><td><span class="c-green">Activity Log</span></td><td>ทุก Activity — append-only log</td></tr>
+                    </table>
+                </div>
+                <div>
+                    <div class="glass-card" style="margin-bottom:14px;">
+                        <div class="section-title"><i class="fas fa-calculator"></i> สูตรคำนวณ Progress</div>
+                        <div style="font-size:0.85rem;">
+                            <div style="display:flex;gap:10px;margin-bottom:8px;align-items:center;">
+                                <div style="padding:6px 14px;background:rgba(0,243,255,0.1);border:1px solid rgba(0,243,255,0.3);border-radius:8px;font-family:'Orbitron',sans-serif;font-size:0.75rem;color:var(--neon-blue);">Phase 1</div>
+                                <div style="font-size:1.2rem;font-weight:800;color:var(--neon-blue);">= 25%</div>
+                            </div>
+                            <div style="display:flex;gap:10px;margin-bottom:8px;align-items:center;">
+                                <div style="padding:6px 14px;background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.3);border-radius:8px;font-family:'Orbitron',sans-serif;font-size:0.75rem;color:var(--neon-green);">Phase 2</div>
+                                <div style="font-size:1.2rem;font-weight:800;color:var(--neon-green);">= 40%</div>
+                            </div>
+                            <div style="display:flex;gap:10px;margin-bottom:8px;align-items:center;">
+                                <div style="padding:6px 14px;background:rgba(255,255,0,0.1);border:1px solid rgba(255,255,0,0.3);border-radius:8px;font-family:'Orbitron',sans-serif;font-size:0.75rem;color:var(--neon-yellow);">Phase 3</div>
+                                <div style="font-size:1.2rem;font-weight:800;color:var(--neon-yellow);">= 25%</div>
+                            </div>
+                            <div style="display:flex;gap:10px;align-items:center;">
+                                <div style="padding:6px 14px;background:rgba(255,0,255,0.1);border:1px solid rgba(255,0,255,0.3);border-radius:8px;font-family:'Orbitron',sans-serif;font-size:0.75rem;color:var(--neon-pink);">Phase 4</div>
+                                <div style="font-size:1.2rem;font-weight:800;color:var(--neon-pink);">= 10%</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="glass-card">
+                        <div class="section-title"><i class="fas fa-circle-notch"></i> Status Legend</div>
+                        <div style="font-size:0.82rem;">
+                            <div style="margin-bottom:6px;">⬜ <strong>Not Started</strong> — ยังไม่เริ่ม</div>
+                            <div style="margin-bottom:6px;">🔄 <strong class="c-blue">In Progress</strong> — กำลังดำเนินการ</div>
+                            <div style="margin-bottom:6px;">✅ <strong class="c-green">Completed</strong> — เสร็จสมบูรณ์</div>
+                            <div style="margin-bottom:6px;">⚠️ <strong class="c-yellow">At Risk</strong> — มีความเสี่ยง</div>
+                            <div>🔴 <strong class="c-pink">Blocked</strong> — ติดขัด ต้องแก้ไขก่อน</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer"><span>AI Code Template — Easy Buy PCL</span><span class="c-blue">Progress Dashboard</span></div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 12: DEFINITION OF DONE -->
+    <!-- ============================================================ -->
+    <div class="slide" data-slide="12">
+        <div class="slide-header">
+            <div class="slide-number">11</div>
+            <div>
+                <div class="slide-title">Definition of Done</div>
+                <div class="slide-subtitle">เกณฑ์ทุกข้อต้องผ่านก่อน Release — ไม่มีข้อยกเว้น</div>
+            </div>
+        </div>
+        <div class="slide-content">
+            <div class="two-col">
+                <div>
+                    <div class="glass-card" style="margin-bottom:14px;">
+                        <div class="section-title"><i class="fas fa-list-check"></i> ทุกข้อต้องผ่าน (ALL must pass)</div>
+                        <ul class="checklist">
+                            <li><i class="fas fa-circle-check check-ok"></i><div><strong>Requirements approved</strong> by Stakeholder<br><span style="font-size:0.72rem;color:rgba(255,255,255,0.6);">Role 1 output ได้รับการ approve</span></div></li>
+                            <li><i class="fas fa-circle-check check-ok"></i><div><strong>Design Review passed</strong><br><span style="font-size:0.72rem;color:rgba(255,255,255,0.6);">Architecture + UX/UI reviewed</span></div></li>
+                            <li><i class="fas fa-circle-check check-ok"></i><div><strong>Code passed Code Review</strong><br><span style="font-size:0.72rem;color:rgba(255,255,255,0.6);">Role 5 review-report approved</span></div></li>
+                            <li><i class="fas fa-circle-check check-ok"></i><div><strong>Code passed Security Scan</strong><br><span style="font-size:0.72rem;color:rgba(255,255,255,0.6);">Role 6 — no Critical/High vulns</span></div></li>
+                            <li><i class="fas fa-circle-check check-ok"></i><div><strong>Unit Test Coverage ≥ 80%</strong><br><span style="font-size:0.72rem;color:rgba(255,255,255,0.6);">ทุก Sprint ต้องผ่านเกณฑ์นี้</span></div></li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="glass-card" style="margin-bottom:14px;">
+                        <ul class="checklist" style="margin-top:0;">
+                            <li><i class="fas fa-circle-check check-ok"></i><div><strong>QA Testing passed</strong> all critical cases<br><span style="font-size:0.72rem;color:rgba(255,255,255,0.6);">Role 7 qa-signoff.md signed</span></div></li>
+                            <li><i class="fas fa-circle-check check-ok"></i><div><strong>No Critical/High vulnerabilities</strong><br><span style="font-size:0.72rem;color:rgba(255,255,255,0.6);">Security Assessment final</span></div></li>
+                            <li><i class="fas fa-circle-check check-ok"></i><div><strong>Documentation complete</strong><br><span style="font-size:0.72rem;color:rgba(255,255,255,0.6);">API docs, User manual, Onboarding</span></div></li>
+                            <li><i class="fas fa-circle-check check-ok"></i><div><strong>Deployed to Production</strong> successfully<br><span style="font-size:0.72rem;color:rgba(255,255,255,0.6);">Role 8 DevOps completed</span></div></li>
+                            <li><i class="fas fa-circle-check check-ok"></i><div><strong>Monitoring &amp; Alerting</strong> operational<br><span style="font-size:0.72rem;color:rgba(255,255,255,0.6);">Dashboards + alerts configured</span></div></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="highlight-box green" style="margin-top:0;">
+                <strong class="c-green">ใคร Verify?</strong> — PM (Role 10) ตรวจ Definition of Done checklist ทุกข้อก่อน mark progress-dashboard.md เป็น 100% และส่งมอบ Final Delivery
+            </div>
+        </div>
+        <div class="slide-footer"><span>AI Code Template — Easy Buy PCL</span><span class="c-blue">Definition of Done</span></div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 13: HOW TO START -->
+    <!-- ============================================================ -->
+    <div class="slide" data-slide="13">
+        <div class="slide-header">
+            <div class="slide-number">12</div>
+            <div>
+                <div class="slide-title">วิธีเริ่มใช้งาน</div>
+                <div class="slide-subtitle">3 ขั้นตอนง่ายๆ — Auto-Pipeline Mode</div>
+            </div>
+        </div>
+        <div class="slide-content">
+            <div class="three-col" style="margin-bottom:14px;">
+                <div class="glass-card" style="border-color:rgba(0,243,255,0.4);text-align:center;">
+                    <div style="font-family:'Orbitron',sans-serif;font-size:3rem;color:var(--neon-blue);font-weight:900;line-height:1;">01</div>
+                    <div style="font-size:2rem;margin:10px 0;">📋</div>
+                    <div style="font-weight:700;font-size:1rem;color:var(--neon-blue);margin-bottom:10px;">กรอก Requirement</div>
+                    <div style="font-size:0.8rem;color:rgba(255,255,255,0.75);">
+                        เปิดไฟล์ <code style="color:var(--neon-yellow);">requirement_template.md</code><br>
+                        กรอกข้อมูลโครงการให้ครบ<br>
+                        (หัวข้อที่มี * คือบังคับ)
+                    </div>
+                </div>
+                <div class="glass-card" style="border-color:rgba(176,38,255,0.4);text-align:center;">
+                    <div style="font-family:'Orbitron',sans-serif;font-size:3rem;color:var(--neon-purple);font-weight:900;line-height:1;">02</div>
+                    <div style="font-size:2rem;margin:10px 0;">💬</div>
+                    <div style="font-weight:700;font-size:1rem;color:var(--neon-purple);margin-bottom:10px;">สั่ง AI</div>
+                    <div style="font-size:0.8rem;color:rgba(255,255,255,0.75);">
+                        พิมพ์คำสั่ง:<br>
+                        <span class="highlight-box" style="margin:8px 0;display:block;font-style:italic;font-size:0.75rem;">
+                            "เริ่มพัฒนาตาม auto-pipeline<br>จาก requirement_template.md"
+                        </span>
+                    </div>
+                </div>
+                <div class="glass-card" style="border-color:rgba(0,255,136,0.4);text-align:center;">
+                    <div style="font-family:'Orbitron',sans-serif;font-size:3rem;color:var(--neon-green);font-weight:900;line-height:1;">03</div>
+                    <div style="font-size:2rem;margin:10px 0;">✅</div>
+                    <div style="font-weight:700;font-size:1rem;color:var(--neon-green);margin-bottom:10px;">Review Checkpoints</div>
+                    <div style="font-size:0.8rem;color:rgba(255,255,255,0.75);">
+                        AI จะหยุดที่ Checkpoint<br>
+                        ให้คุณ Review + Approve<br>
+                        ก่อนไป Phase ถัดไป
+                    </div>
+                </div>
+            </div>
+            <div class="two-col">
+                <div class="glass-card">
+                    <div class="section-title"><i class="fas fa-file-import"></i> requirement_template.md — ส่วนสำคัญ</div>
+                    <table class="cyber-table">
+                        <tr><th>Section</th><th>เนื้อหา</th><th>บังคับ?</th></tr>
+                        <tr><td>1. Project Info</td><td>ชื่อ, เป้าหมาย, KPIs</td><td><span class="tag tag-pink">*</span></td></tr>
+                        <tr><td>2. Users</td><td>กลุ่มผู้ใช้, บทบาท</td><td><span class="tag tag-pink">*</span></td></tr>
+                        <tr><td>3. Features</td><td>Must/Should/Nice to Have</td><td><span class="tag tag-pink">*</span></td></tr>
+                        <tr><td>4. Tech Stack</td><td>Frontend/Backend/DB</td><td><span class="tag tag-blue">Optional</span></td></tr>
+                        <tr><td>8. Constraints</td><td>Team, Budget, Sprint count</td><td><span class="tag tag-pink">*</span></td></tr>
+                        <tr><td>9. Additional</td><td>Notifications, Reports</td><td><span class="tag tag-blue">Optional</span></td></tr>
+                    </table>
+                </div>
+                <div class="glass-card">
+                    <div class="section-title"><i class="fas fa-hand-pointer"></i> Manual Mode — เมื่อไหร่ใช้?</div>
+                    <ul class="cyber-list">
+                        <li><i class="fas fa-arrow-right c-blue"></i>ต้องการงานเฉพาะ Role ใด Role หนึ่ง</li>
+                        <li><i class="fas fa-arrow-right c-blue"></i>ต้องการควบคุมทุกขั้นตอนเอง</li>
+                        <li><i class="fas fa-arrow-right c-blue"></i>เพิ่ม Role ใน project ที่มีอยู่แล้ว</li>
+                    </ul>
+                    <div style="margin-top:10px;font-size:0.8rem;color:rgba(255,255,255,0.7);">
+                        วิธีใช้ Manual:<br>
+                        1. Copy prompt จาก <code style="color:var(--neon-yellow);font-size:0.72rem;">.ai-prompts/[role]/prompt.md</code><br>
+                        2. ใช้ template จาก <code style="color:var(--neon-yellow);font-size:0.72rem;">templates/[role]/</code> เป็น output structure
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer"><span>AI Code Template — Easy Buy PCL</span><span class="c-blue">Getting Started</span></div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 14: THANK YOU -->
+    <!-- ============================================================ -->
+    <div class="slide title-slide" data-slide="14">
+        <div>
+            <div style="font-family:'Orbitron',sans-serif;font-size:1rem;color:var(--neon-blue);letter-spacing:4px;margin-bottom:20px;">🦞 EASY BUY PCL — AI SDLC TRAINING</div>
+            <div class="cyber-title" style="font-size:3rem;">พร้อมเริ่มใช้งาน!</div>
+            <div class="cyber-subtitle" style="font-size:1.3rem;margin-top:12px;">AI Code Template</div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:30px;max-width:700px;margin-left:auto;margin-right:auto;">
+                <div class="glass-card" style="text-align:center;border-color:rgba(0,243,255,0.3);">
+                    <div style="font-size:1.8rem;margin-bottom:8px;">📋</div>
+                    <div style="font-size:0.78rem;color:var(--neon-blue);font-weight:600;">Step 1</div>
+                    <div style="font-size:0.75rem;color:rgba(255,255,255,0.7);">กรอก<br>requirement_template.md</div>
+                </div>
+                <div class="glass-card" style="text-align:center;border-color:rgba(176,38,255,0.3);">
+                    <div style="font-size:1.8rem;margin-bottom:8px;">🤖</div>
+                    <div style="font-size:0.78rem;color:var(--neon-purple);font-weight:600;">Step 2</div>
+                    <div style="font-size:0.75rem;color:rgba(255,255,255,0.7);">สั่ง AI<br>เริ่ม Auto-Pipeline</div>
+                </div>
+                <div class="glass-card" style="text-align:center;border-color:rgba(0,255,136,0.3);">
+                    <div style="font-size:1.8rem;margin-bottom:8px;">🚀</div>
+                    <div style="font-size:0.78rem;color:var(--neon-green);font-weight:600;">Step 3</div>
+                    <div style="font-size:0.75rem;color:rgba(255,255,255,0.7);">Review Checkpoints<br>&amp; Deliver!</div>
+                </div>
+            </div>
+            <div style="margin-top:24px;font-size:0.85rem;color:rgba(255,255,255,0.6);">
+                <div style="margin-bottom:8px;">📁 <code style="color:var(--neon-yellow);">requirement_template.md</code> — จุดเริ่มต้น</div>
+                <div style="margin-bottom:8px;">📁 <code style="color:var(--neon-yellow);">.ai-prompts/</code> — AI Prompts ทุก Role</div>
+                <div style="margin-bottom:8px;">📁 <code style="color:var(--neon-yellow);">templates/</code> — 47 Deliverable Templates</div>
+                <div>📁 <code style="color:var(--neon-yellow);">standards/</code> — Company Baseline</div>
+            </div>
+            <div class="cyber-badge" style="margin-top:30px;border-color:var(--neon-green);color:var(--neon-green);">
+                Questions &amp; Discussion
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Navigation -->
+<div class="nav-container">
+    <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)"><i class="fas fa-chevron-left"></i></button>
+    <div class="slide-counter"><span id="currentSlide">1</span> / <span id="totalSlides">14</span></div>
+    <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)"><i class="fas fa-chevron-right"></i></button>
+</div>
+
+<!-- Slide Dots -->
+<div class="dots-container" id="dotsContainer"></div>
+
+<script>
+    // ── Particles ────────────────────────────────────────────────
+    const particlesContainer = document.getElementById('particles');
+    for (let i = 0; i < 50; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.style.left = Math.random() * 100 + '%';
+        p.style.animationDelay = Math.random() * 15 + 's';
+        p.style.animationDuration = (10 + Math.random() * 20) + 's';
+        const colors = ['#00f3ff', '#ff00ff', '#b026ff', '#00ff88'];
+        p.style.background = colors[Math.floor(Math.random() * colors.length)];
+        p.style.width = p.style.height = (1 + Math.random() * 3) + 'px';
+        particlesContainer.appendChild(p);
+    }
+
+    // ── Slide Logic ──────────────────────────────────────────────
+    const slides = document.querySelectorAll('.slide');
+    const total = slides.length;
+    let current = 0;
+    let isAnimating = false;
+
+    document.getElementById('totalSlides').textContent = total;
+
+    // Build dots
+    const dotsContainer = document.getElementById('dotsContainer');
+    slides.forEach((_, i) => {
+        const dot = document.createElement('div');
+        dot.className = 'dot' + (i === 0 ? ' active' : '');
+        dot.onclick = () => goToSlide(i);
+        dotsContainer.appendChild(dot);
+    });
+
+    function updateUI() {
+        document.getElementById('currentSlide').textContent = current + 1;
+        document.getElementById('progressBar').style.width = ((current + 1) / total * 100) + '%';
+        document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === current));
+    }
+
+    function goToSlide(index) {
+        if (isAnimating || index === current) return;
+        isAnimating = true;
+        slides[current].classList.remove('active');
+        slides[current].style.display = 'none';
+        current = Math.max(0, Math.min(total - 1, index));
+        slides[current].style.display = 'flex';
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                slides[current].classList.add('active');
+                updateUI();
+                setTimeout(() => { isAnimating = false; }, 800);
+            });
+        });
+    }
+
+    function changeSlide(dir) { goToSlide(current + dir); }
+
+    // Keyboard
+    document.addEventListener('keydown', e => {
+        if (['ArrowRight', ' ', 'Enter'].includes(e.key)) { e.preventDefault(); changeSlide(1); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); changeSlide(-1); }
+        else if (e.key === 'Home') { e.preventDefault(); goToSlide(0); }
+        else if (e.key === 'End') { e.preventDefault(); goToSlide(total - 1); }
+    });
+
+    // Touch / Swipe
+    let touchStartX = 0;
+    document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+    document.addEventListener('touchend', e => {
+        const diff = touchStartX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 50) changeSlide(diff > 0 ? 1 : -1);
+    });
+
+    // Init
+    updateUI();
+</script>
+</body>
+</html>

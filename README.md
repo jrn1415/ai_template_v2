@@ -26,15 +26,15 @@ Central template for simulating a complete software development team with 10 spe
 50+ ready-to-use templates covering every phase of software development:
 
 - **Requirements**: Requirements doc, user story map, priority matrix, risk analysis
-- **Architecture**: Architecture diagram, tech stack, API spec, DB schema, data flow
+- **Architecture**: Architecture diagram, tech stack, API spec, DB schema, data flow, ADR log
 - **UX/UI**: User personas, journey map, wireframes, design system, usability testing
-- **Development**: README template, test conventions, PR template
+- **Development**: README template, code structure guide, test conventions, PR template
 - **Code Review**: Review report, review checklist
 - **Security**: Threat model (STRIDE), OWASP assessment, security report, remediation plan, policies
 - **QA Testing**: Test plan, test cases, bug report, performance test, QA sign-off
 - **DevOps**: CI/CD pipeline, Docker config, monitoring, runbooks, environments, infrastructure
-- **Documentation**: User manual, API docs, onboarding, troubleshooting, release notes, ADR
-- **Project Management**: Roadmap, sprint plan, status report, risk register, meeting templates, **progress dashboard**
+- **Documentation**: User manual, API docs, onboarding, troubleshooting, release notes
+- **Project Management**: Roadmap, sprint plan, sprint retrospective, status report, **progress dashboard**
 
 ## Quick Start
 
@@ -99,20 +99,24 @@ Requirements --> Architecture --> UX/UI --> Sprint Planning
 │   ├── ...
 │   └── 10-project-management/
 ├── templates/                   # 50+ deliverable templates
-│   ├── requirements/
-│   ├── architecture/
-│   ├── ux-ui/
-│   ├── development/
-│   ├── code-review/
-│   ├── security/
-│   ├── qa-testing/
-│   ├── devops/
-│   ├── documentation/
-│   └── project-management/
+│   ├── 01-requirements/
+│   ├── 02-architecture/
+│   ├── 03-ux-ui/
+│   ├── 04-development/
+│   ├── 05-code-review/
+│   ├── 06-security/
+│   ├── 07-qa-testing/
+│   ├── 08-devops/
+│   ├── 09-documentation/
+│   └── 10-project-management/
+├── standards/                   # Company-wide baseline standards
+│   ├── coding-standards.md      # Naming, TDD, Git, Security baseline
+│   └── tech-stack-catalog.md    # Approved tech stack catalog
 ├── docs/
 │   ├── workflow.md              # SDLC workflow & DoD
 │   ├── how-to-use-en.md        # Usage guide (English)
-│   └── how-to-use-th.md        # Usage guide (Thai)
+│   ├── how-to-use-th.md        # Usage guide (Thai)
+│   └── improvement-recommendations.md  # Change log & recommendations
 ├── README.md                    # Project overview (English)
 └── README-th.md                 # Project overview (Thai)
 ```

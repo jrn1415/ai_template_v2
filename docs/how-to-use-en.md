@@ -18,16 +18,16 @@
 ### Order of Operations
 
 ```
- 1. Requirements Analysis  →  Fill templates/requirements/
- 2. System Architecture    →  Fill templates/architecture/
- 3. UX/UI Design           →  Fill templates/ux-ui/
- 4. Development            →  Use  templates/development/
- 5. Code Review            →  Use  templates/code-review/
- 6. Security Assessment    →  Use  templates/security/
- 7. QA Testing             →  Use  templates/qa-testing/
- 8. DevOps & Deployment    →  Use  templates/devops/
- 9. Documentation          →  Use  templates/documentation/
-10. Project Management     →  Use  templates/project-management/
+ 1. Requirements Analysis  →  Fill templates/01-requirements/
+ 2. System Architecture    →  Fill templates/02-architecture/
+ 3. UX/UI Design           →  Fill templates/03-ux-ui/
+ 4. Development            →  Use  templates/04-development/
+ 5. Code Review            →  Use  templates/05-code-review/
+ 6. Security Assessment    →  Use  templates/06-security/
+ 7. QA Testing             →  Use  templates/07-qa-testing/
+ 8. DevOps & Deployment    →  Use  templates/08-devops/
+ 9. Documentation          →  Use  templates/09-documentation/
+10. Project Management     →  Use  templates/10-project-management/
 ```
 
 > **Note**: You don't have to complete every step. Pick only the ones relevant to your needs.
@@ -161,21 +161,26 @@ If you only need a specific role (e.g., just Code Review), use only that role's 
 │   └── 10-project-management/prompt.md #  Product Owner / PM
 │
 ├── templates/                         # Deliverable templates
-│   ├── requirements/                  #   Requirements docs (4 files)
-│   ├── architecture/                  #   Architecture docs (5 files)
-│   ├── ux-ui/                         #   UI design docs (5 files)
-│   ├── development/                   #   Development docs (3 files)
-│   ├── code-review/                   #   Code review docs (2 files)
-│   ├── security/                      #   Security docs (5 files)
-│   ├── qa-testing/                    #   QA testing docs (5 files)
-│   ├── devops/                        #   DevOps docs (6 files)
-│   ├── documentation/                 #   User-facing docs (6 files)
-│   └── project-management/            #   PM docs (5 files)
+│   ├── 01-requirements/               #   Requirements docs (4 files)
+│   ├── 02-architecture/               #   Architecture docs (6 files)
+│   ├── 03-ux-ui/                      #   UI design docs (5 files)
+│   ├── 04-development/                #   Development docs (4 files)
+│   ├── 05-code-review/                #   Code review docs (2 files)
+│   ├── 06-security/                   #   Security docs (5 files)
+│   ├── 07-qa-testing/                 #   QA testing docs (5 files)
+│   ├── 08-devops/                     #   DevOps docs (6 files)
+│   ├── 09-documentation/              #   User-facing docs (5 files)
+│   └── 10-project-management/         #   PM docs (5 files)
+│
+├── standards/                         # Company-wide baseline standards
+│   ├── coding-standards.md            #   Naming, TDD, Git, Security baseline
+│   └── tech-stack-catalog.md          #   Approved tech stack catalog
 │
 ├── docs/
 │   ├── workflow.md                    # SDLC workflow diagram
 │   ├── how-to-use-en.md              # This file (English)
-│   └── how-to-use-th.md              # Thai version
+│   ├── how-to-use-th.md              # Thai version
+│   └── improvement-recommendations.md # Change log & recommendations
 │
 └── README.md                          # Project overview
 ```

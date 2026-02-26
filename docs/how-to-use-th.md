@@ -18,16 +18,16 @@
 ### ลำดับการทำงาน
 
 ```
- 1. วิเคราะห์ความต้องการ  →  กรอก templates/requirements/
- 2. ออกแบบสถาปัตยกรรม     →  กรอก templates/architecture/
- 3. ออกแบบ UX/UI          →  กรอก templates/ux-ui/
- 4. พัฒนาระบบ             →  ใช้  templates/development/
- 5. ตรวจสอบโค้ด           →  ใช้  templates/code-review/
- 6. ตรวจสอบความปลอดภัย    →  ใช้  templates/security/
- 7. ทดสอบคุณภาพ           →  ใช้  templates/qa-testing/
- 8. จัดการ DevOps          →  ใช้  templates/devops/
- 9. เขียนเอกสาร           →  ใช้  templates/documentation/
-10. บริหารโครงการ          →  ใช้  templates/project-management/
+ 1. วิเคราะห์ความต้องการ  →  กรอก templates/01-requirements/
+ 2. ออกแบบสถาปัตยกรรม     →  กรอก templates/02-architecture/
+ 3. ออกแบบ UX/UI          →  กรอก templates/03-ux-ui/
+ 4. พัฒนาระบบ             →  ใช้  templates/04-development/
+ 5. ตรวจสอบโค้ด           →  ใช้  templates/05-code-review/
+ 6. ตรวจสอบความปลอดภัย    →  ใช้  templates/06-security/
+ 7. ทดสอบคุณภาพ           →  ใช้  templates/07-qa-testing/
+ 8. จัดการ DevOps          →  ใช้  templates/08-devops/
+ 9. เขียนเอกสาร           →  ใช้  templates/09-documentation/
+10. บริหารโครงการ          →  ใช้  templates/10-project-management/
 ```
 
 > **หมายเหตุ**: ไม่จำเป็นต้องทำทุกขั้นตอน สามารถเลือกเฉพาะขั้นตอนที่ต้องการได้
@@ -161,21 +161,26 @@
 │   └── 10-project-management/prompt.md #  Product Owner / PM
 │
 ├── templates/                         # Template สำหรับเอกสารส่งมอบ
-│   ├── requirements/                  #   เอกสารความต้องการ (4 ไฟล์)
-│   ├── architecture/                  #   เอกสารสถาปัตยกรรม (5 ไฟล์)
-│   ├── ux-ui/                         #   เอกสารออกแบบ UI (5 ไฟล์)
-│   ├── development/                   #   เอกสารพัฒนา (3 ไฟล์)
-│   ├── code-review/                   #   เอกสารตรวจสอบโค้ด (2 ไฟล์)
-│   ├── security/                      #   เอกสารความปลอดภัย (5 ไฟล์)
-│   ├── qa-testing/                    #   เอกสารทดสอบ (5 ไฟล์)
-│   ├── devops/                        #   เอกสาร DevOps (6 ไฟล์)
-│   ├── documentation/                 #   เอกสารสำหรับผู้ใช้ (6 ไฟล์)
-│   └── project-management/            #   เอกสารบริหารโครงการ (5 ไฟล์)
+│   ├── 01-requirements/               #   เอกสารความต้องการ (4 ไฟล์)
+│   ├── 02-architecture/               #   เอกสารสถาปัตยกรรม (6 ไฟล์)
+│   ├── 03-ux-ui/                      #   เอกสารออกแบบ UI (5 ไฟล์)
+│   ├── 04-development/                #   เอกสารพัฒนา (4 ไฟล์)
+│   ├── 05-code-review/                #   เอกสารตรวจสอบโค้ด (2 ไฟล์)
+│   ├── 06-security/                   #   เอกสารความปลอดภัย (5 ไฟล์)
+│   ├── 07-qa-testing/                 #   เอกสารทดสอบ (5 ไฟล์)
+│   ├── 08-devops/                     #   เอกสาร DevOps (6 ไฟล์)
+│   ├── 09-documentation/              #   เอกสารสำหรับผู้ใช้ (5 ไฟล์)
+│   └── 10-project-management/         #   เอกสารบริหารโครงการ (5 ไฟล์)
+│
+├── standards/                         # มาตรฐานระดับบริษัท
+│   ├── coding-standards.md            #   Naming, TDD, Git, Security baseline
+│   └── tech-stack-catalog.md          #   Approved tech stack catalog
 │
 ├── docs/
 │   ├── workflow.md                    # ผังกระบวนการ SDLC
 │   ├── how-to-use-en.md              # คู่มือภาษาอังกฤษ
-│   └── how-to-use-th.md              # ไฟล์นี้ (ภาษาไทย)
+│   ├── how-to-use-th.md              # ไฟล์นี้ (ภาษาไทย)
+│   └── improvement-recommendations.md # Change log & recommendations
 │
 └── README.md                          # ภาพรวมโครงการ
 ```

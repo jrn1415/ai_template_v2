@@ -71,7 +71,7 @@ docker compose up -d
 3. **[Concept 3]**: [Brief explanation]
 
 ### Architecture Diagram
-[Refer to templates/architecture/architecture-diagram.md]
+[Refer to templates/02-architecture/architecture-diagram.md]
 
 ---
 
