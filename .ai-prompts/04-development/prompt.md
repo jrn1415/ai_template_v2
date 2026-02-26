@@ -153,7 +153,10 @@ READ: templates/04-development/readme-template.md
 **Code Quality Rules:**
 - Function length: ไม่เกิน 20 บรรทัด — ถ้าเกิน → extract function
 - Naming: variables/functions ชัดเจน self-documenting (เช่น `getUserByEmail` ดีกว่า `getUser`)
-- Comments: เขียนเฉพาะ "why" ไม่เขียน "what" (code บอก what ได้เอง)
+- Comments: เขียน**ภาษาไทย**เสมอ — อธิบายเฉพาะ "why" (เหตุผลที่ตัดสินใจแบบนี้) ไม่เขียน "what" (code บอก what ได้เอง)
+  - ✅ ดี: `// ใช้ snapshot ราคา ณ เวลาที่สั่งซื้อ เพราะราคาสินค้าอาจเปลี่ยนได้`
+  - ❌ ไม่ดี: `// save unit price to cart item` (อธิบาย what ซึ่ง code บอกอยู่แล้ว)
+  - ❌ ไม่ดี: `// Use price snapshot because product price can change` (ภาษาอังกฤษ)
 - Error handling: ทุก async operation มี try/catch หรือ error boundary
 - Magic numbers/strings: ใช้ constants หรือ enums เสมอ
 
