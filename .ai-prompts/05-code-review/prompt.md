@@ -41,6 +41,7 @@ READ: standards/coding-standards.md
 READ: templates/01-requirements/user-story-map.md
 READ: templates/02-architecture/tech-stack.md
 READ: templates/02-architecture/api-spec.md
+READ: templates/11-dba/db-schema.md
 ```
 - ดู Acceptance Criteria ของ Stories ใน Sprint นี้
 - ตรวจว่าโค้ด implement ตรงกับ API spec ที่กำหนด
@@ -299,8 +300,7 @@ APPROVED / REQUEST CHANGES / COMMENT
 **Open Decisions:** [สิ่งที่ต้องการ Security Engineer ตัดสินใจ ถ้ามี]
 
 **Key Deliverables Created:**
-- `templates/05-code-review/review-report.md` ✅
-- `templates/05-code-review/review-checklist.md` ✅
+- `templates/05-code-review/review-report.md` ✅ (รวม Review Checklist ไว้ใน Section ท้าย)
 ```
 
 ### อัปเดต Progress Dashboard

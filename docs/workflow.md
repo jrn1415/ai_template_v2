@@ -16,7 +16,7 @@
 ┌─────────────────┐                                         │
 │ 1. REQUIREMENT  │  Requirements Document                  │
 │    ANALYST      │  User Stories                           │
-│                 │  Priority Matrix                        │
+│                 │  MoSCoW Matrix                          │
 └────────┬────────┘                                         │
          │                                                  │
          ▼                                                  │
@@ -97,8 +97,9 @@
 |------|-------|-------|--------|------|
 | 2.1 | System Architect | Requirements | Architecture doc | Design review |
 | 2.2 | System Architect | Architecture | Tech stack + API spec | Team approval |
-| 2.3 | Security Engineer | Architecture | Security review | No critical issues |
-| 2.4 | UX/UI Designer | Requirements + Architecture | UI designs | Design review |
+| 2.3 | DBA | Architecture | DB Schema + Migrations | Design review |
+| 2.4 | Security Engineer | Architecture | Security review | No critical issues |
+| 2.5 | UX/UI Designer | Requirements + Architecture | UI designs | Design review |
 
 ### Phase 3: Development
 
@@ -169,12 +170,13 @@
 
 ## Role Interaction Matrix
 
-| From \ To | Req | Arch | UX | Dev | Review | Sec | QA | DevOps | Doc | PO |
-|-----------|-----|------|----|-----|--------|-----|-----|--------|-----|-----|
-| **Req** | - | Specs | Specs | - | - | - | - | - | Req doc | Report |
-| **Arch** | Questions | - | Constraints | Tech spec | - | Review | - | Infra req | Arch doc | Report |
-| **UX** | Questions | Questions | - | Designs | - | - | Flows | - | UI doc | Report |
-| **Dev** | Questions | Questions | Questions | - | PR | - | Builds | Deploy req | Code doc | Report |
+| From \ To | Req | Arch | DBA | UX | Dev | Review | Sec | QA | DevOps | Doc | PO |
+|-----------|-----|------|-----|----|-----|--------|-----|-----|--------|-----|-----|
+| **Req** | - | Specs | Specs | Specs | - | - | - | - | - | Req doc | Report |
+| **Arch** | Questions | - | Engine | Constraints | Tech spec | - | Review | - | Infra req | Arch doc | Report |
+| **DBA** | - | Specs | - | - | Schema | - | Review | - | DB req | DB doc | Report |
+| **UX** | Questions | Questions | - | - | Designs | - | - | Flows | - | UI doc | Report |
+| **Dev** | Questions | Questions | Questions | Questions | - | PR | - | Builds | Deploy req | Code doc | Report |
 | **Review** | - | - | - | Feedback | - | - | - | - | - | Report |
 | **Sec** | - | Feedback | - | Vulns | - | - | - | Sec config | Sec doc | Report |
 | **QA** | Verify AC | - | Verify UX | Bugs | - | - | - | Env req | Test doc | Report |
@@ -193,7 +195,7 @@
 
 **สิ่งที่ติดตาม:**
 - Phase Progress (4 phases)
-- Role Completion (10 roles)
+- Role Completion (11 roles)
 - Sprint Progress (Phase 2)
 - Deliverables Registry (ไฟล์ทั้งหมดที่สร้าง)
 - Key Decisions, Issues & Blockers, Activity Log

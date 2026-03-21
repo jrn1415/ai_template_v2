@@ -11,7 +11,7 @@
 
 - **Architecture Patterns**: เลือก pattern ที่เหมาะสมกับ team size, scale, และ business need — ไม่ over-engineer
 - **Tech Stack Selection**: เลือก technology โดยคำนึงถึง team expertise, ecosystem maturity, และ TCO
-- **Database Design**: ออกแบบ schema ที่ scalable, normalized, และ query-efficient
+- **Database Selection**: เลือกประเภทฐานข้อมูล (SQL/NoSQL) ที่เหมาะสมกับ workload และ data structure
 - **API Design**: สร้าง RESTful API ที่ consistent, versioned, และ developer-friendly
 - **Security by Design**: ฝัง security ตั้งแต่ architecture layer ไม่รอ patch ทีหลัง
 
@@ -27,7 +27,6 @@
 ```
 READ: templates/01-requirements/requirements-document.md
 READ: templates/01-requirements/user-story-map.md
-READ: templates/01-requirements/priority-matrix.md
 READ: templates/01-requirements/risk-analysis.md
 ```
 
@@ -68,9 +67,9 @@ READ: templates/10-project-management/progress-dashboard.md
 **Step 3 — Select Technology Stack**
 > สำหรับแต่ละ layer เลือก technology พร้อม rationale + alternatives ที่พิจารณา
 
-**Step 4 — Design Database Schema**
-> ระบุ entities, relationships, cardinality
-> เลือก index strategy ตาม query patterns จาก User Stories
+**Step 4 — Select Database Type & Hosting Strategy**
+> ตัดสินใจเลือกใช้ DB Engine (Postgres, Mongo, etc.) พร้อม HA plan
+> ส่งต่อ Entity requirements ให้ Role 11 (DBA) ออกแบบ schema โดยละเอียด
 
 **Step 5 — Define API Contracts**
 > ออกแบบ RESTful endpoints ตาม resource-based design
@@ -114,12 +113,11 @@ READ: templates/10-project-management/progress-dashboard.md
 | Cache | ... | ... | ... |
 | Hosting | ... | ... | ... |
 
-### 4.3 Database Schema
+### 4.3 Database Strategy & Engine Selection
 
-- ER Diagram ใน Mermaid `erDiagram` format
-- Table definitions: column name, type, constraints, foreign keys
-- Index strategy: ระบุ indexed columns + เหตุผล (query pattern ที่ optimize)
-- Migration strategy: versioned migrations (Flyway/Liquibase/Prisma)
+- เลือก Primary/Secondary database engine พร้อมเหตุผล
+- กำหนด High Availability & Backup strategy (HA, Clusters, Replicas)
+- (หมายเหตุ: รายละเอียด Table Schema จะถูกออกแบบโดย **Role 11: DBA**)
 
 ### 4.4 API Contracts
 
@@ -233,10 +231,10 @@ Version: 1.0 | Date: [วันที่]
 ## 3. Technology Stack [REQUIRED]
    - Table: Layer | Choice | Rationale | Alternative Considered
 
-## 4. Database Schema [REQUIRED]
-   - ER Diagram (Mermaid erDiagram)
-   - Table definitions (columns, types, constraints, indexes)
-   - Migration strategy
+## 4. Database Strategy [REQUIRED]
+   - DB Engine Selection + Rationale
+   - High Availability & Backup plan
+   - (Detailed Schema by Role 11)
 
 ## 5. API Contract Specification [REQUIRED]
    - All endpoints grouped by resource
@@ -263,7 +261,7 @@ Version: 1.0 | Date: [วันที่]
 - [ ] Architecture pattern มี rationale + alternatives rejected พร้อมเหตุผล
 - [ ] ทุก Must Have feature ถูกรองรับใน architecture (traceable)
 - [ ] Tech stack ทุกตัวมีเหตุผลที่ traceable กับ requirements
-- [ ] Database schema ครอบคลุม entities จาก User Stories ทั้งหมด
+- [ ] เลือก Database Engine ที่เหมาะสมกับ workload แล้ว
 - [ ] API endpoints ครอบคลุม Must Have features ทั้งหมด
 - [ ] NFR ทุกข้อ (performance, scalability, availability) ถูกตอบอย่างเป็นรูปธรรม
 - [ ] ไม่มี [PLACEHOLDER] หลงเหลือในเอกสาร
@@ -280,7 +278,7 @@ Version: 1.0 | Date: [วันที่]
 - Tech Stack:
   - Frontend: [Framework + version]
   - Backend: [Language + Framework]
-  - Database: [DBMS + version]
+  - Database Engine: [DBMS + version]
   - Cache: [Solution]
   - Hosting: [Provider + services]
 - Authentication method: [JWT / OAuth / Session]
@@ -301,10 +299,10 @@ Version: 1.0 | Date: [วันที่]
 - `templates/02-architecture/architecture-diagram.md` ✅
 - `templates/02-architecture/tech-stack.md` ✅
 - `templates/02-architecture/api-spec.md` ✅
-- `templates/02-architecture/db-schema.md` ✅
 - `templates/02-architecture/data-flow.md` ✅
+- `templates/11-dba/db-schema.md` (Role 11 is responsible — ⏳)
 
-> **หลัง Role 6 ตรวจ Architecture เสร็จ:** R6 จะส่ง Handoff ต่อไปยัง Role 3: UX/UI Designer + Role 4: Developer (ถ้า Approved) หรือส่งกลับ Role 2 พร้อม recommendations (ถ้ามีปัญหา Critical/High)
+> **หมายเหตุ:** งานสร้าง DB Schema ถูกแยกไปให้ **Role 11: DBA** เป็นผู้ออกแบบโดยละเอียด โดยเริ่มงานหลังจาก Role 2 กำหนด DB Engine แล้ว
 ```
 
 ### อัปเดต Progress Dashboard

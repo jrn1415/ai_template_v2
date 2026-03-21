@@ -332,7 +332,6 @@ Version: 1.0 | Date: [วันที่]
 - `templates/03-ux-ui/journey-map.md` ✅
 - `templates/03-ux-ui/wireframes.md` ✅
 - `templates/03-ux-ui/design-system.md` ✅
-- `templates/03-ux-ui/usability-testing.md` ✅
 ```
 
 ### อัปเดต Progress Dashboard

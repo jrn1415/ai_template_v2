@@ -38,7 +38,7 @@ READ: templates/10-project-management/progress-dashboard.md
 READ: templates/01-requirements/user-story-map.md
 READ: templates/02-architecture/tech-stack.md
 READ: templates/02-architecture/api-spec.md
-READ: templates/02-architecture/db-schema.md
+READ: templates/11-dba/db-schema.md
 READ: templates/03-ux-ui/wireframes.md
 READ: templates/03-ux-ui/design-system.md
 ```
@@ -177,12 +177,12 @@ READ: templates/04-development/readme-template.md
 
 **Layer-by-Layer Guide:**
 
-| Layer | Approach | เครื่องมือ (C#) |
-|-------|----------|----------------|
-| Domain / Service | ✅ TDD บังคับ | xUnit + NSubstitute (mock deps) |
-| Repository | ✅ TDD บังคับ | xUnit + Testcontainers (real PostgreSQL) |
-| API Controller | ⚠️ Test-after | xUnit + WebApplicationFactory |
-| Frontend | ⚠️ Test-after | Vitest / Jest |
+| Layer | Approach | C# (.NET) | Node.js / TypeScript | Python | Go |
+|-------|----------|-----------|---------------------|--------|----|
+| Domain / Service | ✅ TDD บังคับ | xUnit + NSubstitute | Vitest + vi.mock() | pytest + unittest.mock | testing + testify |
+| Repository | ✅ TDD บังคับ | xUnit + Testcontainers | Vitest + testcontainers-node | pytest + testcontainers | testing + testcontainers-go |
+| API Controller | ⚠️ Test-after | xUnit + WebApplicationFactory | Supertest + Vitest | pytest + httpx / FastAPI TestClient | net/http/httptest |
+| Frontend | ⚠️ Test-after | — | Vitest + Testing Library | — | — |
 
 **Coverage target:** ≥ 80% (lines + branches) — ได้อัตโนมัติถ้าทำ TDD จริง
 

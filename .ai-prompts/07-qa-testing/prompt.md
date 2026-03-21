@@ -30,6 +30,7 @@
 READ: templates/01-requirements/requirements-document.md
 READ: templates/01-requirements/user-story-map.md
 READ: templates/02-architecture/api-spec.md
+READ: templates/11-dba/db-schema.md
 READ: templates/03-ux-ui/wireframes.md
 READ: templates/06-security/security-report.md
 ```

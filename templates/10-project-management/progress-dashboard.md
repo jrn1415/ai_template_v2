@@ -24,7 +24,7 @@
 
 | Phase | ชื่อ Phase | Roles | Status | Deliverables | หมายเหตุ |
 |-------|-----------|-------|--------|-------------|---------|
-| 1 | Requirements & Design | Role 1-3 | ⬜ Not Started | 0 | |
+| 1 | Requirements & Design | Role 1, 2, 11, 3 | ⬜ Not Started | 0 | |
 | 2 | Development (Sprint-based) | Role 4-6 | ⬜ Not Started | 0 | |
 | 3 | Testing & Deployment | Role 7-9 | ⬜ Not Started | 0 | |
 | 4 | Project Summary | Role 10 | ⬜ Not Started | 0 | |
@@ -39,6 +39,7 @@
 |---|------|-------|--------|---------------------|-------------|
 | 1 | Requirement Analyst | 1 | ⬜ Pending | — | |
 | 2 | System Architect | 1 | ⬜ Pending | — | |
+| 11 | Database Administrator (DBA) | 1 | ⬜ Pending | — | |
 | 3 | UX/UI Designer | 1 | ⬜ Pending | — | |
 | 4 | Software Developer | 2 | ⬜ Pending | — | |
 | 5 | Code Reviewer | 2 | ⬜ Pending | — | |

@@ -20,6 +20,7 @@
 ```
  1. Requirements Analysis  →  Fill templates/01-requirements/
  2. System Architecture    →  Fill templates/02-architecture/
+11. Database Design (DBA)  →  Fill templates/11-dba/
  3. UX/UI Design           →  Fill templates/03-ux-ui/
  4. Development            →  Use  templates/04-development/
  5. Code Review            →  Use  templates/05-code-review/
@@ -101,7 +102,7 @@ If you only need a specific role (e.g., just Code Review), use only that role's 
 
 | Mode | Best For | How to Use |
 |------|----------|------------|
-| **Full Simulation** | New projects from scratch | Use all Roles sequentially 1→10 |
+| **Full Simulation** | New projects from scratch | Use all Roles sequentially 1→11 |
 | **Single Role** | Specific tasks | Pick only the Role you need |
 | **Template Only** | Teams with real people | Use templates as document structures only |
 | **Hybrid** | Small teams + AI assistance | Humans do some Roles + AI does others |
@@ -114,7 +115,7 @@ If you only need a specific role (e.g., just Code Review), use only that role's 
 
 ```
 1. Fill in project details in CLAUDE.md
-2. Use Role 1 (Requirements) → Get User Stories + Priority Matrix
+2. Use Role 1 (Requirements) → Get User Stories + MoSCoW Matrix
 3. Use Role 2 (Architecture) → Get Architecture + Tech Stack + API Spec
 4. Use Role 3 (UX/UI) → Get Design System + Wireframes
 5. Start building with Role 4 (Development)
@@ -149,8 +150,10 @@ If you only need a specific role (e.g., just Code Review), use only that role's 
 .
 ├── CLAUDE.md                          # Main project configuration
 ├── .ai-prompts/                       # AI prompts for each Role
+│   ├── auto-pipeline-prompt.md        #   Master prompt (runs all roles)
 │   ├── 01-requirements/prompt.md      #   Requirement Analyst
 │   ├── 02-architecture/prompt.md      #   System Architect
+│   ├── 11-dba/prompt.md               #   Database Administrator (DBA)
 │   ├── 03-ux-ui/prompt.md             #   UX/UI Designer
 │   ├── 04-development/prompt.md       #   Software Developer
 │   ├── 05-code-review/prompt.md       #   Code Reviewer
@@ -161,16 +164,17 @@ If you only need a specific role (e.g., just Code Review), use only that role's 
 │   └── 10-project-management/prompt.md #  Product Owner / PM
 │
 ├── templates/                         # Deliverable templates
-│   ├── 01-requirements/               #   Requirements docs (4 files)
-│   ├── 02-architecture/               #   Architecture docs (6 files)
-│   ├── 03-ux-ui/                      #   UI design docs (5 files)
-│   ├── 04-development/                #   Development docs (4 files)
-│   ├── 05-code-review/                #   Code review docs (2 files)
+│   ├── 01-requirements/               #   Requirements docs (3 files)
+│   ├── 02-architecture/               #   Architecture docs (5 files)
+│   ├── 03-ux-ui/                      #   UI design docs (4 files)
+│   ├── 04-development/                #   Development docs (3 files)
+│   ├── 05-code-review/                #   Code review docs (1 file)
 │   ├── 06-security/                   #   Security docs (5 files)
 │   ├── 07-qa-testing/                 #   QA testing docs (5 files)
 │   ├── 08-devops/                     #   DevOps docs (6 files)
 │   ├── 09-documentation/              #   User-facing docs (5 files)
-│   └── 10-project-management/         #   PM docs (5 files)
+│   ├── 10-project-management/         #   PM docs (4 files)
+│   └── 11-dba/                        #   Database docs (1 file)
 │
 ├── standards/                         # Company-wide baseline standards
 │   ├── coding-standards.md            #   Naming, TDD, Git, Security baseline
@@ -180,7 +184,15 @@ If you only need a specific role (e.g., just Code Review), use only that role's 
 │   ├── workflow.md                    # SDLC workflow diagram
 │   ├── how-to-use-en.md              # This file (English)
 │   ├── how-to-use-th.md              # Thai version
+│   ├── templates-guide.md            # Detailed guide to all templates
+│   ├── context-management.md         # Context window management & session resume
+│   ├── rejection-handling.md         # Iteration & rejection handling protocol
+│   ├── tool-integration-guide.md     # GitHub, Jira, Figma, CI/CD integration
+│   ├── model-selection-guide.md      # AI model selection per role
 │   └── improvement-recommendations.md # Change log & recommendations
+│
+├── examples/
+│   └── techshop/                     # Complete TechShop reference project outputs
 │
 └── README.md                          # Project overview
 ```
@@ -189,7 +201,7 @@ If you only need a specific role (e.g., just Code Review), use only that role's 
 
 ## FAQ
 
-### Q: Do I have to use all 10 Roles?
+### Q: Do I have to use all 11 Roles?
 **A**: No. Pick only the Roles you need. At minimum, we recommend: Requirements → Architecture → Development → Code Review → QA.
 
 ### Q: Which AI tools are compatible?
@@ -202,4 +214,4 @@ If you only need a specific role (e.g., just Code Review), use only that role's 
 **A**: Absolutely. Every template is designed to be modified to fit your team's and project's specific needs.
 
 ### Q: What project size is this for?
-**A**: Any size — from small projects (use 3-4 Roles) to enterprise-scale (use all 10 Roles).
+**A**: Any size — from small projects (use 3-4 Roles) to enterprise-scale (use all 11 Roles).

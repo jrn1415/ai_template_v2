@@ -2,7 +2,7 @@
 
 > **ภาษาไทย**: อ่าน [`README-th.md`](README-th.md) สำหรับเวอร์ชันภาษาไทย
 
-Central template for simulating a complete software development team with 10 specialized roles, designed to work with AI coding assistants (Claude, ChatGPT, etc.) or as a standalone SDLC framework.
+Central template for simulating a complete software development team with 11 specialized roles, designed to work with AI coding assistants (Claude, ChatGPT, etc.) or as a standalone SDLC framework.
 
 ## What's Inside
 
@@ -12,6 +12,7 @@ Central template for simulating a complete software development team with 10 spe
 |---|------|---------|
 | 01 | Requirement Analyst | Gather & prioritize requirements, create user stories |
 | 02 | System Architect | Design architecture, choose tech stack, define APIs |
+| 11 | Database Administrator (DBA) | Design DB Schema, indexing, performance, migrations |
 | 03 | UX/UI Designer | Create personas, wireframes, design system |
 | 04 | Software Developer | Write clean code, tests, documentation |
 | 05 | Code Reviewer | Review code quality, security, performance |
@@ -23,18 +24,19 @@ Central template for simulating a complete software development team with 10 spe
 
 ### Deliverable Templates (`templates/`)
 
-50+ ready-to-use templates covering every phase of software development:
+45+ ready-to-use templates covering every phase of software development:
 
-- **Requirements**: Requirements doc, user story map, priority matrix, risk analysis
-- **Architecture**: Architecture diagram, tech stack, API spec, DB schema, data flow, ADR log
-- **UX/UI**: User personas, journey map, wireframes, design system, usability testing
-- **Development**: README template, code structure guide, test conventions, PR template
-- **Code Review**: Review report, review checklist
+- **Requirements**: Requirements doc (incl. MoSCoW matrix), user story map, risk analysis
+- **Architecture**: Architecture diagram, tech stack, API spec, data flow, ADR log
+- **Database**: DB schema, table definitions, indexing strategy, migration plan
+- **UX/UI**: User personas, journey map, wireframes, design system
+- **Development**: README template, code structure guide, PR template
+- **Code Review**: Review report (incl. review checklist)
 - **Security**: Threat model (STRIDE), OWASP assessment, security report, remediation plan, policies
 - **QA Testing**: Test plan, test cases, bug report, performance test, QA sign-off
 - **DevOps**: CI/CD pipeline, Docker config, monitoring, runbooks, environments, infrastructure
 - **Documentation**: User manual, API docs, onboarding, troubleshooting, release notes
-- **Project Management**: Roadmap, sprint plan, sprint retrospective, status report, **progress dashboard**
+- **Project Management**: Roadmap, sprint plan, sprint retrospective, **progress dashboard**
 
 ## Quick Start
 
@@ -42,14 +44,14 @@ Central template for simulating a complete software development team with 10 spe
 
 1. Fill in `requirement_template.md` with your project details
 2. Tell Claude: `"Start development using auto-pipeline from requirement_template.md"`
-3. Claude will automatically run all 10 roles with Sprint-based development and checkpoints for your review
+3. Claude will automatically run all 11 roles with Sprint-based development and checkpoints for your review
 
 ```
 Fill in requirement_template.md
         ↓
 AI validates + asks follow-up questions (if needed)
         ↓
-Phase 1: Requirements → Architecture → UX/UI → Sprint Planning
+Phase 1: Requirements → Architecture → DBA → UX/UI → Sprint Planning
         ↓ ⏸️ Checkpoint 1 (review & approve + review Sprint Plan)
 Phase 2: Sprint-based Development (one Sprint at a time)
         ├─ Sprint N: Development → Code Review → Security
@@ -92,13 +94,14 @@ Requirements --> Architecture --> UX/UI --> Sprint Planning
 .
 ├── CLAUDE.md                    # Project configuration
 ├── requirement_template.md      # Fill this to start Auto-Pipeline
-├── .ai-prompts/                 # 10 role-based AI prompts + Auto-Pipeline
+├── .ai-prompts/                 # 11 role-based AI prompts + Auto-Pipeline
 │   ├── auto-pipeline-prompt.md  # Master prompt (runs all roles)
 │   ├── 01-requirements/
 │   ├── 02-architecture/
 │   ├── ...
-│   └── 10-project-management/
-├── templates/                   # 50+ deliverable templates
+│   ├── 10-project-management/
+│   └── 11-dba/
+├── templates/                   # 45+ deliverable templates
 │   ├── 01-requirements/
 │   ├── 02-architecture/
 │   ├── 03-ux-ui/
@@ -108,7 +111,9 @@ Requirements --> Architecture --> UX/UI --> Sprint Planning
 │   ├── 07-qa-testing/
 │   ├── 08-devops/
 │   ├── 09-documentation/
-│   └── 10-project-management/
+│   ├── ...
+│   ├── 10-project-management/
+│   └── 11-dba/
 ├── standards/                   # Company-wide baseline standards
 │   ├── coding-standards.md      # Naming, TDD, Git, Security baseline
 │   └── tech-stack-catalog.md    # Approved tech stack catalog
@@ -116,7 +121,14 @@ Requirements --> Architecture --> UX/UI --> Sprint Planning
 │   ├── workflow.md              # SDLC workflow & DoD
 │   ├── how-to-use-en.md        # Usage guide (English)
 │   ├── how-to-use-th.md        # Usage guide (Thai)
+│   ├── templates-guide.md      # Detailed guide to all templates
+│   ├── context-management.md   # Context window management & session resume
+│   ├── rejection-handling.md   # Iteration & rejection handling protocol
+│   ├── tool-integration-guide.md  # GitHub, Jira, Figma, CI/CD integration
+│   ├── model-selection-guide.md   # AI model selection per role
 │   └── improvement-recommendations.md  # Change log & recommendations
+├── examples/
+│   └── techshop/               # Complete TechShop reference project outputs
 ├── README.md                    # Project overview (English)
 └── README-th.md                 # Project overview (Thai)
 ```
@@ -126,7 +138,7 @@ Requirements --> Architecture --> UX/UI --> Sprint Planning
 | Mode | Description |
 |------|-------------|
 | **Auto-Pipeline** | Fill requirement template → AI runs all roles automatically with Sprint-based development & checkpoints |
-| **Full Simulation** | Run all 10 roles sequentially with manual control |
+| **Full Simulation** | Run all 11 roles sequentially with manual control |
 | **Single Role** | Use one role's prompt for specific needs |
 | **Template Only** | Use deliverable templates without AI prompts |
 | **Hybrid** | Combine AI prompts with manual team processes |

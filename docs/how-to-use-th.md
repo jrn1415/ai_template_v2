@@ -20,6 +20,7 @@
 ```
  1. วิเคราะห์ความต้องการ  →  กรอก templates/01-requirements/
  2. ออกแบบสถาปัตยกรรม     →  กรอก templates/02-architecture/
+11. ออกแบบฐานข้อมูล (DBA) →  กรอก templates/11-dba/
  3. ออกแบบ UX/UI          →  กรอก templates/03-ux-ui/
  4. พัฒนาระบบ             →  ใช้  templates/04-development/
  5. ตรวจสอบโค้ด           →  ใช้  templates/05-code-review/
@@ -101,7 +102,7 @@
 
 | รูปแบบ | เหมาะสำหรับ | วิธีใช้ |
 |--------|------------|--------|
-| **Full Simulation** | โปรเจกต์ใหม่ตั้งแต่เริ่มต้น | ใช้ทุก Role ตามลำดับ 1→10 |
+| **Full Simulation** | โปรเจกต์ใหม่ตั้งแต่เริ่มต้น | ใช้ทุก Role ตามลำดับ 1→11 |
 | **Single Role** | งานเฉพาะด้าน | เลือกใช้เฉพาะ Role ที่ต้องการ |
 | **Template Only** | ทีมมีคนจริงแล้ว | ใช้เฉพาะ template เป็นโครงสร้างเอกสาร |
 | **Hybrid** | ทีมเล็ก + AI ช่วย | ให้คนทำบาง Role + AI ทำบาง Role |
@@ -114,7 +115,7 @@
 
 ```
 1. กรอกข้อมูลใน CLAUDE.md
-2. ใช้ Role 1 (Requirements) → ได้ User Stories + Priority Matrix
+2. ใช้ Role 1 (Requirements) → ได้ User Stories + MoSCoW Matrix
 3. ใช้ Role 2 (Architecture) → ได้ Architecture + Tech Stack + API Spec
 4. ใช้ Role 3 (UX/UI) → ได้ Design System + Wireframes
 5. เริ่มพัฒนาตาม Role 4 (Development)
@@ -149,8 +150,10 @@
 .
 ├── CLAUDE.md                          # ไฟล์ตั้งค่าหลักของโครงการ
 ├── .ai-prompts/                       # Prompt สำหรับ AI แต่ละ Role
+│   ├── auto-pipeline-prompt.md        #   Master prompt (สั่ง run ทุก Role)
 │   ├── 01-requirements/prompt.md      #   นักวิเคราะห์ความต้องการ
 │   ├── 02-architecture/prompt.md      #   สถาปนิกระบบ
+│   ├── 11-dba/prompt.md               #   ผู้ดูแลฐานข้อมูล (DBA)
 │   ├── 03-ux-ui/prompt.md             #   นักออกแบบ UX/UI
 │   ├── 04-development/prompt.md       #   นักพัฒนา
 │   ├── 05-code-review/prompt.md       #   ผู้ตรวจสอบโค้ด
@@ -161,16 +164,17 @@
 │   └── 10-project-management/prompt.md #  Product Owner / PM
 │
 ├── templates/                         # Template สำหรับเอกสารส่งมอบ
-│   ├── 01-requirements/               #   เอกสารความต้องการ (4 ไฟล์)
-│   ├── 02-architecture/               #   เอกสารสถาปัตยกรรม (6 ไฟล์)
-│   ├── 03-ux-ui/                      #   เอกสารออกแบบ UI (5 ไฟล์)
-│   ├── 04-development/                #   เอกสารพัฒนา (4 ไฟล์)
-│   ├── 05-code-review/                #   เอกสารตรวจสอบโค้ด (2 ไฟล์)
+│   ├── 01-requirements/               #   เอกสารความต้องการ (3 ไฟล์)
+│   ├── 02-architecture/               #   เอกสารสถาปัตยกรรม (5 ไฟล์)
+│   ├── 03-ux-ui/                      #   เอกสารออกแบบ UI (4 ไฟล์)
+│   ├── 04-development/                #   เอกสารพัฒนา (3 ไฟล์)
+│   ├── 05-code-review/                #   เอกสารตรวจสอบโค้ด (1 ไฟล์)
 │   ├── 06-security/                   #   เอกสารความปลอดภัย (5 ไฟล์)
 │   ├── 07-qa-testing/                 #   เอกสารทดสอบ (5 ไฟล์)
 │   ├── 08-devops/                     #   เอกสาร DevOps (6 ไฟล์)
 │   ├── 09-documentation/              #   เอกสารสำหรับผู้ใช้ (5 ไฟล์)
-│   └── 10-project-management/         #   เอกสารบริหารโครงการ (5 ไฟล์)
+│   ├── 10-project-management/         #   เอกสารบริหารโครงการ (4 ไฟล์)
+│   └── 11-dba/                        #   เอกสารฐานข้อมูล (1 ไฟล์)
 │
 ├── standards/                         # มาตรฐานระดับบริษัท
 │   ├── coding-standards.md            #   Naming, TDD, Git, Security baseline
@@ -180,7 +184,15 @@
 │   ├── workflow.md                    # ผังกระบวนการ SDLC
 │   ├── how-to-use-en.md              # คู่มือภาษาอังกฤษ
 │   ├── how-to-use-th.md              # ไฟล์นี้ (ภาษาไทย)
+│   ├── templates-guide.md            # คำอธิบาย template ทุกไฟล์อย่างละเอียด
+│   ├── context-management.md         # จัดการ Context Window และ Session Resume
+│   ├── rejection-handling.md         # โปรโตคอลจัดการ Rejection & Iteration
+│   ├── tool-integration-guide.md     # GitHub, Jira, Figma, CI/CD integration
+│   ├── model-selection-guide.md      # เลือก AI Model ตามบทบาท
 │   └── improvement-recommendations.md # Change log & recommendations
+│
+├── examples/
+│   └── techshop/                     # ตัวอย่างผลงานครบวงจร TechShop
 │
 └── README.md                          # ภาพรวมโครงการ
 ```

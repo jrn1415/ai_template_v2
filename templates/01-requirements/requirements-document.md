@@ -94,6 +94,42 @@
 |---|-----------|------|-------|--------|
 | D-1 | [dependency] | Internal/External | [team/vendor] | Pending/Confirmed |
 
+## 8. MoSCoW Priority Matrix
+
+### Must Have (ต้องมี — ถ้าไม่มีระบบใช้ไม่ได้)
+
+| ID | Requirement | Justification | Estimated Effort |
+|----|-------------|--------------|-----------------|
+| FR-001 | [requirement] | [เหตุผล] | S/M/L/XL |
+
+### Should Have (ควรมี — สำคัญแต่ไม่ critical)
+
+| ID | Requirement | Justification | Estimated Effort |
+|----|-------------|--------------|-----------------|
+| FR-010 | [requirement] | [เหตุผล] | S/M/L/XL |
+
+### Could Have (อาจมี — nice to have)
+
+| ID | Requirement | Justification | Estimated Effort |
+|----|-------------|--------------|-----------------|
+| FR-020 | [requirement] | [เหตุผล] | S/M/L/XL |
+
+### Won't Have This Time (ไม่ทำในรอบนี้)
+
+| ID | Requirement | Reason for Exclusion | Future Phase |
+|----|-------------|---------------------|-------------|
+| FR-030 | [requirement] | [เหตุผล] | Phase [X] |
+
+### Priority Summary
+
+| Category | Count | % of Total | Estimated Effort |
+|----------|-------|-----------|-----------------|
+| Must Have | [X] | [X]% | [X] story points |
+| Should Have | [X] | [X]% | [X] story points |
+| Could Have | [X] | [X]% | [X] story points |
+| Won't Have | [X] | [X]% | N/A |
+| **Total** | **[X]** | **100%** | **[X] story points** |
+
 ---
 
 ## Approval

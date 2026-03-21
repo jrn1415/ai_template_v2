@@ -27,6 +27,7 @@
 ```
 READ: templates/02-architecture/architecture-diagram.md
 READ: templates/02-architecture/tech-stack.md
+READ: templates/11-dba/db-schema.md
 READ: templates/07-qa-testing/qa-signoff.md
 READ: templates/04-development/readme-template.md
 ```

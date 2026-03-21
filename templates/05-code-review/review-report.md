@@ -55,17 +55,52 @@
 
 ---
 
-## Checklist Results
+## Review Checklist
 
-| Category | Status | Notes |
-|----------|--------|-------|
-| Code Quality | Pass/Fail | [notes] |
-| Naming Conventions | Pass/Fail | |
-| Error Handling | Pass/Fail | |
-| Test Coverage | [X]% | Target: 80% |
-| Security | Pass/Fail | |
-| Performance | Pass/Fail | |
-| Documentation | Pass/Fail | |
+### 1. Correctness
+- [ ] Code implements the requirement correctly (Acceptance Criteria met)
+- [ ] Edge cases are handled
+- [ ] Error handling is appropriate
+- [ ] Null/undefined checks where needed
+- [ ] Race conditions considered (if applicable)
+
+### 2. Code Quality
+- [ ] Follows SOLID principles — no violations found
+- [ ] No code duplication (DRY)
+- [ ] Functions/methods are small and focused (≤ 20 lines)
+- [ ] Naming is clear and descriptive (self-documenting)
+- [ ] No magic numbers/strings (constants/enums used)
+- [ ] No dead code or commented-out code
+
+### 3. Security
+- [ ] No hardcoded secrets or credentials
+- [ ] Input validation on all user inputs (at controller/route level)
+- [ ] Parameterized queries — no string concatenation in SQL
+- [ ] Authentication checks on protected endpoints
+- [ ] Authorization checks (role/permission based)
+- [ ] Sensitive data not logged
+
+### 4. Performance
+- [ ] No N+1 query problems
+- [ ] Pagination for list endpoints
+- [ ] No unnecessary DB calls in loops
+- [ ] Caching used where appropriate
+- [ ] Algorithm complexity is acceptable
+
+### 5. Testing
+- [ ] Tests cover new/changed code (Happy path + Edge cases + Error cases)
+- [ ] Test names are descriptive (`MethodName_Scenario_ExpectedResult`)
+- [ ] Tests are independent (no shared mutable state)
+- [ ] Coverage meets minimum (≥ 80%)
+- [ ] No flaky tests introduced
+
+### 6. Architecture & Git
+- [ ] Follows established patterns in codebase
+- [ ] No unnecessary dependencies added
+- [ ] Proper separation of concerns
+- [ ] Commit messages follow Conventional Commits format
+- [ ] PR is appropriately sized (< 400 lines ideally)
+- [ ] API changes are backward compatible (or versioned)
 
 ## Review Time
 

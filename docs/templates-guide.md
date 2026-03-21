@@ -1,6 +1,6 @@
 # Templates Guide — คู่มืออธิบายไฟล์ Template ทั้งหมด
 
-> **47 ไฟล์** ใน 10 โฟลเดอร์ · ครอบคลุมทุกขั้นตอน SDLC
+> **42 ไฟล์** ใน 11 โฟลเดอร์ · ครอบคลุมทุกขั้นตอน SDLC
 > แต่ละไฟล์ออกแบบมาให้ AI หรือทีมงานกรอกเป็น deliverable จริงของโครงการ
 
 ---
@@ -15,7 +15,7 @@
 
 ---
 
-## 01-requirements/ — วิเคราะห์ความต้องการ (4 ไฟล์)
+## 01-requirements/ — วิเคราะห์ความต้องการ (3 ไฟล์)
 
 > สร้างโดย **Role 1 — Requirement Analyst** ใน Phase 1
 
@@ -32,6 +32,7 @@
 - Functional Requirements — จัดเป็นรายโมดูล พร้อม ID และ Acceptance Criteria
 - Non-Functional Requirements — Performance, Scalability, Availability, Security, Usability
 - Constraints & Assumptions — ข้อจำกัดและสมมติฐาน
+- MoSCoW Matrix (Section 8) — Must/Should/Could/Won't classification พร้อม MVP scope
 - Approval Table — ลายเซ็น PO, Tech Lead, Stakeholder
 
 **ประโยชน์:**
@@ -65,27 +66,6 @@
 
 ---
 
-### `priority-matrix.md` — เมทริกซ์จัดลำดับความสำคัญ
-
-**ใช้ทำอะไร:**
-ประเมินและจัดลำดับฟีเจอร์ด้วยกรอบ MoSCoW (Must / Should / Could / Won't) ร่วมกับการประเมิน Impact vs Effort เพื่อตัดสินใจว่าจะทำอะไรก่อน
-
-**โครงสร้างหลัก:**
-- MoSCoW Classification Table
-- Impact vs Effort Matrix (2x2)
-- MVP Definition — สิ่งที่จำเป็นสำหรับ release แรก
-- Feature Backlog — สิ่งที่เลื่อนออกไป
-
-**ประโยชน์:**
-- ตัดสินใจอย่างมีเหตุผล ไม่ใช่แค่ตามความชอบ
-- ป้องกัน scope creep — มี record ว่า feature ไหนจงใจไม่ทำ
-- PM และ Stakeholder ใช้ตัดสินใจร่วมกันได้ง่าย
-- ช่วยกำหนดขอบเขต MVP ชัดเจน
-
-**ใช้โดย:** Role 10 (PM), Stakeholder
-
----
-
 ### `risk-analysis.md` — วิเคราะห์ความเสี่ยง
 
 **ใช้ทำอะไร:**
@@ -107,7 +87,7 @@
 
 ---
 
-## 02-architecture/ — ออกแบบสถาปัตยกรรม (6 ไฟล์)
+## 02-architecture/ — ออกแบบสถาปัตยกรรม (5 ไฟล์)
 
 > สร้างโดย **Role 2 — System Architect** ใน Phase 1
 
@@ -176,27 +156,6 @@
 
 ---
 
-### `db-schema.md` — Database Schema
-
-**ใช้ทำอะไร:**
-กำหนดโครงสร้างฐานข้อมูลทั้งหมด — ตาราง, คอลัมน์, data types, indexes, foreign keys, constraints
-
-**โครงสร้างหลัก:**
-- Entity Relationship Diagram (ERD) แบบ text/Mermaid
-- แต่ละตาราง: columns, types, constraints, indexes
-- Relationships และ Cardinality
-- Migration strategy
-
-**ประโยชน์:**
-- Developer เขียน migration scripts และ ORM models ได้ถูกต้อง
-- ป้องกันปัญหา data integrity ตั้งแต่ออกแบบ
-- DBA/DevOps ใช้ตั้งค่า database
-- Security Engineer ตรวจสอบ sensitive data fields
-
-**ใช้โดย:** Role 4 (Dev), Role 6 (Security), Role 8 (DevOps)
-
----
-
 ### `data-flow.md` — แผนผัง Data Flow
 
 **ใช้ทำอะไร:**
@@ -239,7 +198,39 @@
 
 ---
 
-## 03-ux-ui/ — ออกแบบ UX/UI (5 ไฟล์)
+## 11-dba/ — ออกแบบฐานข้อมูล (1 ไฟล์)
+
+> สร้างโดย **Role 11 — Database Administrator (DBA)** ใน Phase 1
+
+---
+
+### `db-schema.md` — Database Schema
+
+**ใช้ทำอะไร:**
+กำหนดโครงสร้างฐานข้อมูลทั้งหมด — ตาราง, คอลัมน์, data types, indexes, foreign keys, constraints, security design, migration plan และ backup/recovery strategy
+
+**โครงสร้างหลัก:**
+- Entity Relationship Diagram (ERD) แบบ Mermaid
+- Normalization Decisions — เหตุผลที่เลือก denormalize หรือ JSONB
+- แต่ละตาราง: columns, types, constraints, indexes (GIN, partial, composite)
+- Foreign Key Relationships และ Cardinality
+- DB Security Design (roles, row-level security, encryption)
+- Migration Plan — up/down scripts
+- Backup & Recovery Strategy
+- Performance Considerations (query patterns, slow query hints)
+
+**ประโยชน์:**
+- Developer เขียน migration scripts และ ORM models ได้ถูกต้อง
+- ป้องกันปัญหา data integrity ตั้งแต่ออกแบบ
+- Security Engineer ตรวจสอบ sensitive data fields และ access control
+- DevOps ใช้ตั้งค่า database และ backup policy
+- DBA ใช้ review และ tune performance ก่อน production
+
+**ใช้โดย:** Role 4 (Dev), Role 6 (Security), Role 8 (DevOps)
+
+---
+
+## 03-ux-ui/ — ออกแบบ UX/UI (4 ไฟล์)
 
 > สร้างโดย **Role 3 — UX/UI Designer** ใน Phase 1
 
@@ -331,30 +322,7 @@
 
 ---
 
-### `usability-testing.md` — Usability Testing Report
-
-**ใช้ทำอะไร:**
-บันทึกผลการทดสอบความสามารถในการใช้งานกับผู้ใช้จริงหรือ representative users พร้อม findings และ recommendations
-
-**โครงสร้างหลัก:**
-- Test Objectives & Methodology
-- Participant Profiles
-- Task Scenarios ที่ให้ทดสอบ
-- Findings — Success Rate, Time on Task, Error Rate
-- Usability Issues Severity Matrix
-- Recommendations สำหรับแก้ไข
-
-**ประโยชน์:**
-- หลักฐานเชิงข้อมูลว่า UX ดีหรือไม่ดีตรงไหน
-- Prioritize UX fixes ด้วย data ไม่ใช่ความเห็น
-- Stakeholder เห็น ROI ของการลงทุน UX research
-- ป้องกันปัญหา usability ก่อน launch จริง
-
-**ใช้โดย:** Role 1 (Requirement), Role 10 (PM), Stakeholder
-
----
-
-## 04-development/ — พัฒนาระบบ (4 ไฟล์)
+## 04-development/ — พัฒนาระบบ (3 ไฟล์)
 
 > สร้างโดย **Role 4 — Software Developer** ใน Phase 2
 
@@ -408,30 +376,6 @@
 
 ---
 
-### `test-conventions.md` — มาตรฐานการเขียน Test
-
-**ใช้ทำอะไร:**
-กำหนด convention สำหรับการเขียน test ในโครงการ — naming pattern, folder structure, what to test, mock strategy, coverage requirements
-
-**โครงสร้างหลัก:**
-- Test Types ที่ใช้ (Unit, Integration, E2E)
-- Naming Convention: `MethodName_Scenario_ExpectedResult`
-- Folder/File structure สำหรับ test files
-- Mock & Stub strategy (NSubstitute, Testcontainers)
-- Coverage Requirements (≥80% สำหรับ Service/Domain)
-- TDD Workflow ที่ใช้ในโครงการ
-- ตัวอย่างโค้ด test จริง
-
-**ประโยชน์:**
-- ทีมเขียน test ในรูปแบบเดียวกัน อ่านแล้วเข้าใจได้เร็ว
-- Code Reviewer ตรวจ test quality ได้ตาม standard เดียวกัน
-- ลด debate ว่า "ควร test อะไร" — มี guideline ชัดเจน
-- Coverage ไม่ตก เพราะทุกคนรู้ว่า layer ไหนต้อง test แน่ๆ
-
-**ใช้โดย:** Role 5 (Code Review), Role 7 (QA)
-
----
-
 ### `pull-request-template.md` — PR Template
 
 **ใช้ทำอะไร:**
@@ -455,32 +399,9 @@
 
 ---
 
-## 05-code-review/ — ตรวจสอบโค้ด (2 ไฟล์)
+## 05-code-review/ — ตรวจสอบโค้ด (1 ไฟล์)
 
 > สร้างโดย **Role 5 — Code Reviewer** ใน Phase 2
-
----
-
-### `review-checklist.md` — Checklist การตรวจสอบโค้ด
-
-**ใช้ทำอะไร:**
-รายการตรวจสอบที่ Code Reviewer ต้องผ่านทุกข้อก่อนอนุมัติ PR — ครอบคลุม code quality, security, testing, performance, และ documentation
-
-**โครงสร้างหลัก:**
-- Code Quality (naming, complexity, SOLID principles)
-- Security (input validation, SQL injection, auth checks)
-- Testing (coverage ≥80%, test quality, edge cases)
-- Performance (N+1 queries, unnecessary loops, caching)
-- Documentation (comments, API docs updated)
-- Architecture (layering rules, no shortcuts)
-
-**ประโยชน์:**
-- Review คุณภาพสม่ำเสมอ ไม่ขึ้นกับว่า reviewer คนไหนทำ
-- ไม่มี "ลืมตรวจ" เรื่องสำคัญ
-- Developer รู้ล่วงหน้าว่าจะถูกตรวจอะไร → เขียนโค้ดได้ดีขึ้น
-- ใช้ onboard reviewer ใหม่ได้ทันที
-
-**ใช้โดย:** Role 4 (Dev) — เพื่อเตรียมตัว, Role 5 (Code Review)
 
 ---
 
@@ -495,6 +416,7 @@
 - Overall Assessment (Approved/Approved with conditions/Rejected)
 - Positive Findings — สิ่งที่ทำได้ดี
 - Recommendations สำหรับ Sprint ถัดไป
+- Review Checklist (รวมอยู่ในไฟล์เดียวกัน) — Code Quality, Security, Testing, Performance, Architecture
 
 **ประโยชน์:**
 - Tracking history ว่า issue ไหนถูกแก้แล้ว ยังค้างอยู่ไหน
@@ -996,7 +918,7 @@
 
 ---
 
-## 10-project-management/ — บริหารโครงการ (5 ไฟล์)
+## 10-project-management/ — บริหารโครงการ (4 ไฟล์)
 
 > สร้างโดย **Role 10 — Product Owner/PM** ตลอดกระบวนการ
 
@@ -1010,7 +932,7 @@
 **โครงสร้างหลัก:**
 - Project Overview (Overall Progress %, Current Phase, Current Role)
 - Phase Progress (4 phases + status)
-- Role Completion Table (10 roles)
+- Role Completion Table (11 roles)
 - Sprint Progress (Phase 2)
 - Deliverables Registry — ไฟล์ทุกไฟล์ที่สร้าง
 - Key Decisions Log
@@ -1095,45 +1017,22 @@
 
 ---
 
-### `status-report.md` — Status Report
-
-**ใช้ทำอะไร:**
-รายงานความคืบหน้าของโครงการแบบ periodic (รายสัปดาห์/รายเดือน) สำหรับ Stakeholder และ Management ที่ไม่ได้อยู่ในทีม
-
-**โครงสร้างหลัก:**
-- Executive Summary (3-5 bullets)
-- Overall Status (🟢 On Track / 🟡 At Risk / 🔴 Off Track)
-- Progress ใน Period นี้
-- Planned Next Period
-- Risks & Issues (ที่ต้อง escalate)
-- KPIs (ถ้า track)
-- Decisions Needed จาก Stakeholder
-
-**ประโยชน์:**
-- Stakeholder ได้ข้อมูลสรุปที่อ่านง่าย ไม่ต้องเข้า standup
-- PM บังคับตัวเองสรุปภาพรวมและระบุ blockers อย่างสม่ำเสมอ
-- สร้าง accountability — ทุกคนรู้ว่า committed อะไร
-- ใช้ escalate issues ได้อย่างเป็นทางการ
-
-**ใช้โดย:** Stakeholder, Management, Executive
-
----
-
 ## สรุปภาพรวม
 
 | โฟลเดอร์ | จำนวนไฟล์ | Phase หลัก | เขียนโดย |
 |---------|----------|-----------|---------|
-| 01-requirements | 4 | Phase 1 | Role 1 |
-| 02-architecture | 6 | Phase 1 | Role 2 |
-| 03-ux-ui | 5 | Phase 1 | Role 3 |
-| 04-development | 4 | Phase 2 | Role 4 |
-| 05-code-review | 2 | Phase 2 | Role 5 |
+| 01-requirements | 3 | Phase 1 | Role 1 |
+| 02-architecture | 5 | Phase 1 | Role 2 |
+| 11-dba | 1 | Phase 1 | Role 11 |
+| 03-ux-ui | 4 | Phase 1 | Role 3 |
+| 04-development | 3 | Phase 2 | Role 4 |
+| 05-code-review | 1 | Phase 2 | Role 5 |
 | 06-security | 5 | Phase 1+2 | Role 6 |
 | 07-qa-testing | 5 | Phase 3 | Role 7 |
 | 08-devops | 6 | Phase 3 | Role 8 |
 | 09-documentation | 5 | Phase 3 | Role 9 |
-| 10-project-management | 5 | ตลอดทั้งโครงการ | Role 10 |
-| **รวม** | **47** | | |
+| 10-project-management | 4 | ตลอดทั้งโครงการ | Role 10 |
+| **รวม** | **42** | | |
 
 ---
 

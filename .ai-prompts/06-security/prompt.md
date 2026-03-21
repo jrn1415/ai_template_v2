@@ -41,7 +41,7 @@
 READ: templates/02-architecture/architecture-diagram.md
 READ: templates/02-architecture/tech-stack.md
 READ: templates/02-architecture/api-spec.md
-READ: templates/02-architecture/db-schema.md
+READ: templates/11-dba/db-schema.md
 READ: templates/01-requirements/requirements-document.md
 READ: templates/10-project-management/progress-dashboard.md
 ```
@@ -53,7 +53,7 @@ READ: templates/10-project-management/progress-dashboard.md
 READ: templates/02-architecture/architecture-diagram.md
 READ: templates/02-architecture/tech-stack.md
 READ: templates/02-architecture/api-spec.md
-READ: templates/02-architecture/db-schema.md
+READ: templates/11-dba/db-schema.md
 READ: templates/05-code-review/review-report.md
 ```
 - ดู Handoff Digest จาก Role 5

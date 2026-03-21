@@ -266,9 +266,8 @@ Version: 1.0 | Date: [วันที่] | Status: Draft
 - [อื่นๆ]
 
 **Key Deliverables Created:**
-- `templates/01-requirements/requirements-document.md` ✅
+- `templates/01-requirements/requirements-document.md` ✅ (รวม MoSCoW Priority Matrix ไว้ใน Section 8)
 - `templates/01-requirements/user-story-map.md` ✅
-- `templates/01-requirements/priority-matrix.md` ✅
 - `templates/01-requirements/risk-analysis.md` ✅
 ```
 
