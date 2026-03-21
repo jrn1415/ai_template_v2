@@ -35,7 +35,7 @@
         ↓
 AI ตรวจสอบ → ข้อมูลครบ? → ถ้าไม่ครบ → ถามเพิ่ม
         ↓
-Phase 1: Requirements → Architecture → UX/UI → Sprint Planning
+Phase 1: Requirements → Architecture → DBA → Security Review → UX/UI → Sprint Planning
         ↓ ⏸️ Checkpoint 1 (review & approve + review Sprint Plan)
 Phase 2: พัฒนาแบบ Sprint-based (ทำทีละ Sprint)
         ├─ Sprint N: Development → Code Review → Security

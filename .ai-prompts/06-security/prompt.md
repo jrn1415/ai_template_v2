@@ -437,6 +437,13 @@ Date: [วันที่] | Assessor: Security Engineer AI | Classification: In
 - `templates/06-security/architecture-review.md` ✅
 ```
 
+### อัปเดต Progress Dashboard (Phase 1)
+อัปเดต `templates/10-project-management/progress-dashboard.md`:
+- Activity Log > "R6 Architecture Review: [APPROVED/ISSUES FOUND] — [summary]"
+- Key Decisions > Security constraints ที่กำหนดจาก architecture review
+- Deliverables Registry > เพิ่ม 1 ไฟล์
+- Overall Progress > 20%
+
 ---
 
 ```markdown

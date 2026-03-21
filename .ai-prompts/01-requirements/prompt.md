@@ -274,6 +274,6 @@ Version: 1.0 | Date: [วันที่] | Status: Draft
 ### อัปเดต Progress Dashboard
 อัปเดต `templates/10-project-management/progress-dashboard.md`:
 - Role 1 Status > Completed
-- Deliverables Registry > เพิ่ม 4 ไฟล์
+- Deliverables Registry > เพิ่ม 3 ไฟล์
 - Activity Log > เพิ่ม entry พร้อมวันที่
 - Overall Progress > 10%

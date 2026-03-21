@@ -169,7 +169,7 @@ READ: templates/10-project-management/progress-dashboard.md
 
 **Progress Dashboard Update:**
 - Role 1 Status > Completed
-- Deliverables Registry > 4 files
+- Deliverables Registry > 3 files
 - Activity Log > "Role 1 completed — [X] User Stories created"
 - Overall Progress > 10%
 
@@ -203,17 +203,19 @@ READ: templates/10-project-management/progress-dashboard.md
 - `templates/02-architecture/tech-stack.md`
 - `templates/02-architecture/api-spec.md`
 - `templates/02-architecture/data-flow.md`
+- `templates/02-architecture/adr-log.md` (ถ้ามี non-approved tech stack decisions)
 
 **Self-Validation ก่อน handoff:**
 - [ ] Architecture pattern มี rationale + alternatives rejected
 - [ ] Tech stack ทุกตัวมีเหตุผล traceable กับ requirements
 - [ ] API endpoints ครอบคลุม Must Have ทั้งหมด
 - [ ] NFR ทุกข้อถูกตอบอย่างเป็นรูปธรรม
+- [ ] ถ้าใช้ tech ที่ไม่อยู่ใน Approved list → มี ADR พร้อมเหตุผล
 
 **Progress Dashboard Update:**
 - Role 2 Status > Completed
 - Key Decisions > Tech Stack + Architecture pattern
-- Deliverables Registry > 4 files
+- Deliverables Registry > 4-5 files
 - Activity Log > "Role 2 completed — [Architecture] with [Tech Stack]"
 - Overall Progress > 14%
 
@@ -282,10 +284,12 @@ READ: templates/10-project-management/progress-dashboard.md
 ```
 ถ้า ISSUES FOUND (Critical/High gaps):
   → ส่งกลับ Role 2 พร้อม specific recommendations
-  → Role 2 แก้ไข architecture แล้ว Role 6 ตรวจใหม่
+  → Role 2 แก้ไข architecture (อัปเดตไฟล์ที่เกี่ยวข้อง)
+  → Role 6 ตรวจใหม่เฉพาะส่วนที่แก้ (max 2 รอบ)
+  → ถ้ายัง ISSUES FOUND หลัง 2 รอบ → flag ให้ user ตัดสินใจ
 
 ถ้า APPROVED (ไม่มี Critical/High gaps):
-  → ดำเนินการต่อ Role 3 + ส่ง security constraints
+  → ดำเนินการต่อ Role 3 + ส่ง security constraints สำหรับ R3 (UX) + R4 (Dev)
 ```
 
 **Self-Validation ก่อน handoff:**
@@ -338,7 +342,7 @@ READ: templates/10-project-management/progress-dashboard.md
 **Progress Dashboard Update:**
 - Role 3 Status > Completed
 - Phase 1 Status > Completed
-- Deliverables Registry > 5 files
+- Deliverables Registry > 4 files
 - Activity Log > "Role 3 completed — [X] screens, [X] personas"
 - Overall Progress > 25%
 

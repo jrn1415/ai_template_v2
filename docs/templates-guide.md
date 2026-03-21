@@ -1,6 +1,6 @@
 # Templates Guide — คู่มืออธิบายไฟล์ Template ทั้งหมด
 
-> **42 ไฟล์** ใน 11 โฟลเดอร์ · ครอบคลุมทุกขั้นตอน SDLC
+> **43 ไฟล์** ใน 11 โฟลเดอร์ · ครอบคลุมทุกขั้นตอน SDLC
 > แต่ละไฟล์ออกแบบมาให้ AI หรือทีมงานกรอกเป็น deliverable จริงของโครงการ
 
 ---
@@ -428,9 +428,32 @@
 
 ---
 
-## 06-security/ — ความปลอดภัย (5 ไฟล์)
+## 06-security/ — ความปลอดภัย (6 ไฟล์)
 
 > สร้างโดย **Role 6 — Security Engineer** ใน Phase 1 (review) และ Phase 2 (scan)
+
+---
+
+### `architecture-review.md` — Architecture Security Review
+
+**ใช้ทำอะไร:**
+ตรวจสอบ architecture design ด้านความปลอดภัยก่อนเริ่มเขียนโค้ด — เป็น quality gate ระหว่าง Phase 1 (Design) กับ Phase 2 (Development)
+
+**โครงสร้างหลัก:**
+- Executive Summary + Review Verdict (APPROVED / ISSUES FOUND)
+- STRIDE Threat Assessment ระดับ architecture (ไม่ใช่ code)
+- Authentication & Authorization Architecture Review
+- Data Security Architecture (encryption, PII handling)
+- API & Network Security Design (CORS, rate limiting, HTTPS)
+- Security Gaps & Recommendations
+- Handoff Digest (→ R3+R4 ถ้า approved, → R2 ถ้ามี issues)
+
+**ประโยชน์:**
+- ตรวจจับปัญหา security ตั้งแต่ design phase ก่อนเริ่ม code
+- ลดต้นทุนการแก้ไข (แก้ architecture ถูกกว่าแก้ code)
+- กำหนด security constraints ให้ Role 3 (UX) และ Role 4 (Dev) ปฏิบัติตาม
+
+**ใช้โดย:** Role 2 (Architect — ถ้าต้องแก้ไข), Role 3 (UX/UI), Role 4 (Dev)
 
 ---
 
@@ -1027,12 +1050,12 @@
 | 03-ux-ui | 4 | Phase 1 | Role 3 |
 | 04-development | 3 | Phase 2 | Role 4 |
 | 05-code-review | 1 | Phase 2 | Role 5 |
-| 06-security | 5 | Phase 1+2 | Role 6 |
+| 06-security | 6 | Phase 1+2 | Role 6 |
 | 07-qa-testing | 5 | Phase 3 | Role 7 |
 | 08-devops | 6 | Phase 3 | Role 8 |
 | 09-documentation | 5 | Phase 3 | Role 9 |
 | 10-project-management | 4 | ตลอดทั้งโครงการ | Role 10 |
-| **รวม** | **42** | | |
+| **รวม** | **43** | | |
 
 ---
 

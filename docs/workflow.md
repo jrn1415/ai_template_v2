@@ -20,18 +20,29 @@
 └────────┬────────┘                                         │
          │                                                  │
          ▼                                                  │
-┌─────────────────┐     ┌──────────────────┐               │
-│ 2. SYSTEM       │────→│ 6. SECURITY      │ (Architecture │
-│    ARCHITECT    │     │    ENGINEER      │  Review)       │
-│                 │     │                  │               │
-└────────┬────────┘     └──────────────────┘               │
+┌─────────────────┐                                        │
+│ 2. SYSTEM       │  Architecture, Tech Stack               │
+│    ARCHITECT    │  API Spec, Data Flow                    │
+└────────┬────────┘                                        │
          │                                                  │
-    ┌────┴────┐                                            │
-    ▼         ▼                                            │
-┌────────┐ ┌──────────────┐                                │
-│ 3. UX/ │ │ Architecture │                                │
-│ UI     │ │ Documents    │                                │
-└───┬────┘ └──────────────┘                                │
+         ▼                                                  │
+┌─────────────────┐                                        │
+│ 11. DATABASE    │  DB Schema, Indexing                    │
+│     ADMIN (DBA) │  Migrations                            │
+└────────┬────────┘                                        │
+         │                                                  │
+         ▼                                                  │
+┌─────────────────┐                                        │
+│ 6. SECURITY     │──→ Issues Found? ──→ Back to Architect │
+│    ENGINEER     │                                        │
+│    (Review)     │──→ Approved                            │
+└────────┬────────┘                                        │
+         │                                                  │
+         ▼                                                  │
+┌─────────────────┐                                        │
+│ 3. UX/UI       │  Personas, Wireframes                   │
+│    DESIGNER    │  Design System                          │
+└───┬─────────────┘                                        │
     │                                                      │
     ▼                                                      │
 ┌─────────────────┐                                        │

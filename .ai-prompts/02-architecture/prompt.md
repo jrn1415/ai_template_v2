@@ -300,6 +300,7 @@ Version: 1.0 | Date: [วันที่]
 - `templates/02-architecture/tech-stack.md` ✅
 - `templates/02-architecture/api-spec.md` ✅
 - `templates/02-architecture/data-flow.md` ✅
+- `templates/02-architecture/adr-log.md` ✅ (ถ้ามี non-approved tech stack)
 - `templates/11-dba/db-schema.md` (Role 11 is responsible — ⏳)
 
 > **หมายเหตุ:** งานสร้าง DB Schema ถูกแยกไปให้ **Role 11: DBA** เป็นผู้ออกแบบโดยละเอียด โดยเริ่มงานหลังจาก Role 2 กำหนด DB Engine แล้ว
@@ -311,4 +312,4 @@ Version: 1.0 | Date: [วันที่]
 - Key Decisions > Tech Stack + Architecture pattern ที่เลือก
 - Deliverables Registry > เพิ่ม 5 ไฟล์
 - Activity Log > เพิ่ม entry
-- Overall Progress > 16%
+- Overall Progress > 14%

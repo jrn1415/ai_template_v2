@@ -84,7 +84,7 @@ The application will be available at `http://localhost:[PORT]`
 
 API documentation is available at `/api/docs` when running the server.
 
-See [API Specification](../architecture/api-spec.md) for full API reference.
+See [API Specification](../02-architecture/api-spec.md) for full API reference.
 
 ## Testing
 
@@ -101,12 +101,12 @@ See [API Specification](../architecture/api-spec.md) for full API reference.
 
 ## Deployment
 
-See [DevOps Documentation](../devops/environments.md) for deployment instructions.
+See [DevOps Documentation](../08-devops/environments.md) for deployment instructions.
 
 ## Contributing
 
 1. Create a feature branch from `main`: `git checkout -b feature/my-feature`
-2. Write code following our [coding standards](../development/test-conventions.md)
+2. Write code following our [coding standards](../../standards/coding-standards.md)
 3. Write tests (coverage >= 80%)
 4. Create a Pull Request using the [PR template](./pull-request-template.md)
 5. Wait for code review approval

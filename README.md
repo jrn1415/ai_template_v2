@@ -24,7 +24,7 @@ Central template for simulating a complete software development team with 11 spe
 
 ### Deliverable Templates (`templates/`)
 
-45+ ready-to-use templates covering every phase of software development:
+43 ready-to-use templates covering every phase of software development:
 
 - **Requirements**: Requirements doc (incl. MoSCoW matrix), user story map, risk analysis
 - **Architecture**: Architecture diagram, tech stack, API spec, data flow, ADR log
@@ -32,7 +32,7 @@ Central template for simulating a complete software development team with 11 spe
 - **UX/UI**: User personas, journey map, wireframes, design system
 - **Development**: README template, code structure guide, PR template
 - **Code Review**: Review report (incl. review checklist)
-- **Security**: Threat model (STRIDE), OWASP assessment, security report, remediation plan, policies
+- **Security**: Architecture review, threat model (STRIDE), OWASP assessment, security report, remediation plan, policies
 - **QA Testing**: Test plan, test cases, bug report, performance test, QA sign-off
 - **DevOps**: CI/CD pipeline, Docker config, monitoring, runbooks, environments, infrastructure
 - **Documentation**: User manual, API docs, onboarding, troubleshooting, release notes
@@ -51,7 +51,7 @@ Fill in requirement_template.md
         ↓
 AI validates + asks follow-up questions (if needed)
         ↓
-Phase 1: Requirements → Architecture → DBA → UX/UI → Sprint Planning
+Phase 1: Requirements → Architecture → DBA → Security Review → UX/UI → Sprint Planning
         ↓ ⏸️ Checkpoint 1 (review & approve + review Sprint Plan)
 Phase 2: Sprint-based Development (one Sprint at a time)
         ├─ Sprint N: Development → Code Review → Security
@@ -74,13 +74,13 @@ Phase 4: Project Summary → Final Delivery (with Sprint-by-Sprint breakdown)
 ## Workflow
 
 ```
-Requirements --> Architecture --> UX/UI --> Sprint Planning
-                     |                           |
-                     |                    Sprint-based Development
-                     |                    ├─ Sprint N: Dev → Code Review
-              Security Review             └─ Sprint Review per Sprint
-                     |                           |
-                 QA Testing <-------------- Security Scan
+Requirements --> Architecture --> DBA --> Security Review --> UX/UI --> Sprint Planning
+                                                                          |
+                                                                   Sprint-based Development
+                                                                   ├─ Sprint N: Dev → Code Review → Security Scan
+                                                                   └─ Sprint Review per Sprint
+                                                                          |
+                                                                   QA Testing
                      |
                DevOps Deploy --> Production
                      |
@@ -101,7 +101,7 @@ Requirements --> Architecture --> UX/UI --> Sprint Planning
 │   ├── ...
 │   ├── 10-project-management/
 │   └── 11-dba/
-├── templates/                   # 45+ deliverable templates
+├── templates/                   # 43 deliverable templates
 │   ├── 01-requirements/
 │   ├── 02-architecture/
 │   ├── 03-ux-ui/
